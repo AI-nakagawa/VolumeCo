@@ -1,117 +1,80 @@
-"use strict";
+const CACHE_NAME = "volumeco-v0.3.0";
 
-const CACHE_NAME = "volumeco-v0.2.0";
-
-const BASE_URL = new URL("./", self.location.href);
-const INDEX_URL = new URL("index.html", BASE_URL).href;
-
-const APP_SHELL = [
-  BASE_URL.href,
-  INDEX_URL,
-  new URL("manifest.webmanifest", BASE_URL).href,
-  new URL("icon.svg", BASE_URL).href
+const APP_FILES = [
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./icon.svg"
 ];
 
-/*
- * 初回インストール時に、オフライン起動に必要な
- * ファイルを端末へ保存します。
- */
-self.addEventListener("install", (event) => {
+self.addEventListener("install", event => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => cache.addAll(APP_SHELL))
+      .then(cache => cache.addAll(APP_FILES))
       .then(() => self.skipWaiting())
   );
 });
 
-/*
- * 新しいバージョンが有効になったとき、
- * 古いキャッシュを削除します。
- */
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", event => {
   event.waitUntil(
     caches
       .keys()
-      .then((cacheNames) =>
+      .then(cacheNames =>
         Promise.all(
           cacheNames
-            .filter((name) => name !== CACHE_NAME)
-            .map((name) => caches.delete(name))
+            .filter(cacheName => cacheName !== CACHE_NAME)
+            .map(cacheName => caches.delete(cacheName))
         )
       )
       .then(() => self.clients.claim())
   );
 });
 
-/*
- * ページの移動では、通信できる場合は最新版を取得します。
- * 圏外の場合は、端末に保存したindex.htmlを表示します。
- */
-self.addEventListener("fetch", (event) => {
-  const request = event.request;
-
-  if (request.method !== "GET") {
+self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") {
     return;
   }
 
-  const requestUrl = new URL(request.url);
-
-  if (requestUrl.origin !== self.location.origin) {
-    return;
-  }
-
-  if (request.mode === "navigate") {
+  if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response && response.ok) {
-            const responseCopy = response.clone();
+      fetch(event.request)
+        .then(response => {
+          const copy = response.clone();
 
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(INDEX_URL, responseCopy);
-            });
-          }
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put("./index.html", copy);
+          });
 
           return response;
         })
-        .catch(async () => {
-          return (
-            (await caches.match(request)) ||
-            (await caches.match(INDEX_URL)) ||
-            (await caches.match(BASE_URL.href))
-          );
-        })
+        .catch(() => caches.match("./index.html"))
     );
 
     return;
   }
 
-  /*
-   * 画像やマニフェストなどは端末内のファイルを優先し、
-   * 保存されていない場合だけネットワークから取得します。
-   */
   event.respondWith(
-    caches.match(request).then(async (cachedResponse) => {
+    caches.match(event.request).then(cachedResponse => {
       if (cachedResponse) {
         return cachedResponse;
       }
 
-      try {
-        const networkResponse = await fetch(request);
+      return fetch(event.request).then(response => {
+        if (
+          response &&
+          response.status === 200 &&
+          response.type === "basic"
+        ) {
+          const copy = response.clone();
 
-        if (networkResponse && networkResponse.ok) {
-          const responseCopy = networkResponse.clone();
-
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, responseCopy);
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, copy);
           });
         }
 
-        return networkResponse;
-      } catch (error) {
-        return caches.match(INDEX_URL);
-      }
+        return response;
+      });
     })
   );
 });
