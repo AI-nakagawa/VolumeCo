@@ -2,11 +2,20 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
   <meta name="theme-color" content="#1f4e78">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="残量計算">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
+  <meta
+    name="apple-mobile-web-app-title"
+    content="残量計算"
+  >
 
   <title>コンクリート残量計算</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -33,45 +42,52 @@
 
     body {
       margin: 0;
-      background: #eef3f7;
+      min-height: 100vh;
       color: #1e293b;
+      background: #eef3f7;
       font-family:
-        -apple-system, BlinkMacSystemFont, "Yu Gothic", "Hiragino Kaku Gothic ProN",
-        "Segoe UI", sans-serif;
+        -apple-system,
+        BlinkMacSystemFont,
+        "Yu Gothic",
+        "Hiragino Kaku Gothic ProN",
+        "Segoe UI",
+        sans-serif;
       font-size: 16px;
     }
 
     button,
     input,
-    select,
-    textarea {
+    select {
       font: inherit;
     }
 
     button {
       min-height: 48px;
+      padding: 10px 14px;
       border: 0;
       border-radius: 10px;
-      padding: 10px 16px;
       font-weight: 700;
       cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     input,
-    select,
-    textarea {
+    select {
       width: 100%;
-      min-height: 50px;
+      min-height: 52px;
+      padding: 10px 12px;
       border: 2px solid var(--border);
       border-radius: 10px;
       background: var(--white);
-      padding: 10px 12px;
       font-size: 18px;
     }
 
     input:focus,
-    select:focus,
-    textarea:focus {
+    select:focus {
       border-color: var(--blue);
       outline: 3px solid rgba(47, 117, 181, 0.16);
     }
@@ -80,30 +96,21 @@
       text-align: right;
     }
 
-    textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-
     .app-header {
       position: sticky;
       top: 0;
       z-index: 20;
       padding:
         max(10px, env(safe-area-inset-top))
-        14px 10px;
+        12px 10px;
       color: var(--white);
       background: var(--navy);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
     }
 
-    .header-row {
+    .header-inner {
       max-width: 760px;
       margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
     }
 
     .app-title {
@@ -111,26 +118,15 @@
       font-size: 19px;
     }
 
-    .connection {
-  　　display: none;
-      flex-shrink: 0;
-      border-radius: 999px;
-      padding: 5px 9px;
-      background: rgba(255, 255, 255, 0.18);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
     .total-bar {
-      max-width: 760px;
-      margin: 10px auto 0;
       display: flex;
-      justify-content: space-between;
       align-items: baseline;
-      padding: 10px 14px;
+      justify-content: space-between;
+      margin-top: 9px;
+      padding: 9px 13px;
       color: #16324f;
       background: var(--light-green);
-      border-radius: 12px;
+      border-radius: 11px;
     }
 
     .total-label {
@@ -138,27 +134,27 @@
     }
 
     .total-value {
-      font-size: 26px;
-      font-weight: 800;
       color: var(--green);
+      font-size: 25px;
+      font-weight: 800;
     }
 
     .tabs {
       position: sticky;
-      top: 120px;
+      top: 104px;
       z-index: 15;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 8px 10px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
+      max-width: 760px;
+      margin: auto;
+      padding: 8px 10px;
       background: #eef3f7;
     }
 
     .tab-button {
       min-height: 44px;
-      padding: 7px 5px;
+      padding: 7px 4px;
       color: var(--navy);
       background: var(--white);
       border: 1px solid var(--border);
@@ -174,7 +170,7 @@
     main {
       max-width: 760px;
       margin: auto;
-      padding: 6px 10px 100px;
+      padding: 6px 10px 30px;
     }
 
     .screen {
@@ -250,7 +246,7 @@
       font-size: 14px;
     }
 
-    .status-message {
+    .message {
       display: none;
       margin-bottom: 12px;
       padding: 12px;
@@ -258,21 +254,21 @@
       font-weight: 700;
     }
 
-    .status-message.show {
+    .message.show {
       display: block;
     }
 
-    .status-message.info {
+    .message.info {
       color: #1e4f7a;
       background: var(--light-blue);
     }
 
-    .status-message.success {
+    .message.success {
       color: #1b5e20;
       background: var(--light-green);
     }
 
-    .status-message.error {
+    .message.error {
       color: #8b1a1a;
       background: #ffebee;
     }
@@ -312,6 +308,7 @@
 
     .button-full {
       width: 100%;
+      margin-top: 12px;
     }
 
     .point-entry {
@@ -336,8 +333,8 @@
 
     .point-card-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       margin-bottom: 8px;
     }
 
@@ -439,54 +436,10 @@
       font-size: 18px;
     }
 
-    .saved-list {
-      display: grid;
-      gap: 9px;
-    }
-
-    .saved-card {
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-    }
-
-    .saved-card-title {
-      margin-bottom: 4px;
-      font-weight: 800;
-    }
-
-    .saved-card-detail {
-      margin-bottom: 8px;
-      color: var(--gray);
-      font-size: 13px;
-    }
-
     .empty {
       padding: 20px;
       color: var(--gray);
       text-align: center;
-    }
-
-    .footer-actions {
-      position: fixed;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 30;
-      padding:
-        9px 10px
-        max(9px, env(safe-area-inset-bottom));
-      background: rgba(255, 255, 255, 0.96);
-      border-top: 1px solid var(--border);
-      backdrop-filter: blur(8px);
-    }
-
-    .footer-actions-inner {
-      max-width: 760px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
     }
 
     .hidden {
@@ -494,7 +447,7 @@
     }
 
     .version {
-      margin-top: 16px;
+      margin: 16px 0 4px;
       color: var(--gray);
       text-align: center;
       font-size: 12px;
@@ -507,7 +460,7 @@
       }
 
       .total-value {
-        font-size: 23px;
+        font-size: 22px;
       }
 
       .calculated-values {
@@ -519,50 +472,36 @@
 
 <body>
   <header class="app-header">
-    <div class="header-row">
+    <div class="header-inner">
       <h1 class="app-title">コンクリート残量計算</h1>
-      <span id="connectionStatus" class="connection">確認中</span>
-    </div>
 
-    <div class="total-bar">
-      <span class="total-label">合計数量</span>
-      <span id="headerTotal" class="total-value">0.000 m³</span>
+      <div class="total-bar">
+        <span class="total-label">合計数量</span>
+        <span id="headerTotal" class="total-value">0.000 m³</span>
+      </div>
     </div>
   </header>
 
   <nav class="tabs">
-    <button class="tab-button active" data-tab="conditions">1. 基本条件</button>
-    <button class="tab-button" data-tab="points">2. 測点入力</button>
-    <button class="tab-button" data-tab="results">3. 結果・保存</button>
+    <button class="tab-button active" data-tab="conditions">
+      1. 基本条件
+    </button>
+
+    <button class="tab-button" data-tab="points">
+      2. 測点入力
+    </button>
+
+    <button class="tab-button" data-tab="results">
+      3. 計算結果
+    </button>
   </nav>
 
   <main>
-    <div id="message" class="status-message"></div>
+    <div id="message" class="message"></div>
 
     <section id="conditions" class="screen active">
       <div class="card">
-        <h2>現場情報</h2>
-
-        <div class="field">
-          <label for="siteName" class="required">現場名</label>
-          <input id="siteName" type="text" autocomplete="off" placeholder="例：A工区">
-        </div>
-
-        <div class="grid-2">
-          <div class="field">
-            <label for="operator" class="required">担当者</label>
-            <input id="operator" type="text" autocomplete="name" placeholder="担当者名">
-          </div>
-
-          <div class="field">
-            <label for="recordDate" class="required">記録日</label>
-            <input id="recordDate" type="date">
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>計算条件</h2>
+        <h2>基本条件</h2>
 
         <div class="field">
           <label for="method" class="required">計算方式</label>
@@ -574,8 +513,14 @@
 
         <div class="field">
           <label for="topWidth" class="required">上幅</label>
+
           <div class="unit-field">
-            <input id="topWidth" type="number" inputmode="decimal" step="0.001">
+            <input
+              id="topWidth"
+              type="number"
+              inputmode="decimal"
+              step="0.001"
+            >
             <span class="unit">m</span>
           </div>
         </div>
@@ -583,8 +528,14 @@
         <div id="averageFields" class="hidden">
           <div class="field">
             <label for="bottomWidth" class="required">下幅</label>
+
             <div class="unit-field">
-              <input id="bottomWidth" type="number" inputmode="decimal" step="0.001">
+              <input
+                id="bottomWidth"
+                type="number"
+                inputmode="decimal"
+                step="0.001"
+              >
               <span class="unit">m</span>
             </div>
           </div>
@@ -593,23 +544,33 @@
         <div id="slopeFields">
           <div class="grid-2">
             <div class="field">
-              <label for="frontSlope" class="required">前勾配</label>
-              <input id="frontSlope" type="number" inputmode="decimal" step="0.001">
+              <label for="frontSlope" class="required">前勾配 n</label>
+
+              <input
+                id="frontSlope"
+                type="number"
+                inputmode="decimal"
+                step="0.001"
+              >
             </div>
 
             <div class="field">
-              <label for="rearSlope" class="required">後勾配</label>
-              <input id="rearSlope" type="number" inputmode="decimal" step="0.001">
+              <label for="rearSlope" class="required">後勾配 n</label>
+
+              <input
+                id="rearSlope"
+                type="number"
+                inputmode="decimal"
+                step="0.001"
+              >
             </div>
           </div>
         </div>
 
-        <div class="field">
-          <label for="notes">備考</label>
-          <textarea id="notes" placeholder="段差、開口、埋設物など"></textarea>
-        </div>
-
-        <button id="toPointsButton" class="button-primary button-full">
+        <button
+          id="toPointsButton"
+          class="button-primary button-full"
+        >
           次へ：測点入力
         </button>
       </div>
@@ -617,7 +578,8 @@
 
     <section id="points" class="screen">
       <div class="notice">
-        距離は始点からの累積値を入力してください。距離と高さは同じ測点に入力します。
+        距離は始点からの累積値を入力してください。
+        距離と高さは同じ測点に入力します。
       </div>
 
       <div class="card">
@@ -627,6 +589,7 @@
           <div class="grid-2">
             <div class="field">
               <label for="pointDistance" class="required">距離</label>
+
               <div class="unit-field">
                 <input
                   id="pointDistance"
@@ -641,6 +604,7 @@
 
             <div class="field">
               <label for="pointHeight" class="required">高さ</label>
+
               <div class="unit-field">
                 <input
                   id="pointHeight"
@@ -655,8 +619,19 @@
           </div>
 
           <div class="button-row">
-            <button id="addPointButton" class="button-success">測点を追加</button>
-            <button id="cancelEditButton" class="button-neutral hidden">修正を中止</button>
+            <button
+              id="addPointButton"
+              class="button-success"
+            >
+              測点を追加
+            </button>
+
+            <button
+              id="cancelEditButton"
+              class="button-neutral hidden"
+            >
+              修正を中止
+            </button>
           </div>
         </div>
       </div>
@@ -667,8 +642,19 @@
       </div>
 
       <div class="button-row">
-        <button id="sampleButton" class="button-secondary">サンプル読込</button>
-        <button id="toResultsButton" class="button-primary">計算結果を確認</button>
+        <button
+          id="sampleButton"
+          class="button-secondary"
+        >
+          サンプル読込
+        </button>
+
+        <button
+          id="toResultsButton"
+          class="button-primary"
+        >
+          計算結果を確認
+        </button>
       </div>
     </section>
 
@@ -695,15 +681,22 @@
       </div>
 
       <div class="card">
-        <h2>保存・バックアップ</h2>
-
-        <button id="saveProjectButton" class="button-success button-full">
-          この案件を端末に保存
-        </button>
+        <h2>データ操作</h2>
 
         <div class="button-row">
-          <button id="exportCsvButton" class="button-primary">CSV出力</button>
-          <button id="importCsvButton" class="button-secondary">CSV読込</button>
+          <button
+            id="exportCsvButton"
+            class="button-primary"
+          >
+            CSV出力
+          </button>
+
+          <button
+            id="importCsvButton"
+            class="button-secondary"
+          >
+            CSV読込
+          </button>
         </div>
 
         <input
@@ -713,114 +706,111 @@
           accept=".csv,text/csv"
         >
 
-        <div class="button-row">
-          <button id="installGuideButton" class="button-neutral">ホーム画面追加</button>
-          <button id="newProjectButton" class="button-danger">新規計算</button>
-        </div>
+        <button
+          id="newCalculationButton"
+          class="button-danger button-full"
+        >
+          新規計算
+        </button>
       </div>
 
-      <div class="card">
-        <h2>端末に保存した案件</h2>
-        <div id="savedProjectList" class="saved-list"></div>
-      </div>
-
-      <div class="version">VolumeCo Version 0.1</div>
+      <div class="version">VolumeCo Version 0.2</div>
     </section>
   </main>
-
-  <footer class="footer-actions">
-    <div class="footer-actions-inner">
-      <button id="footerSaveButton" class="button-success">自動保存済み</button>
-      <button id="footerResultButton" class="button-primary">結果を見る</button>
-    </div>
-  </footer>
 
   <script>
     "use strict";
 
-    const APP_VERSION = "0.1";
-    const CURRENT_KEY = "volumeco_current";
-    const RECORDS_KEY = "volumeco_records";
-    const OPERATOR_KEY = "volumeco_operator";
+    const APP_VERSION = "0.2";
+    const STORAGE_KEY = "volumeco_current";
 
     let editingPointIndex = null;
-    let state = loadCurrentState();
-
-    function todayString() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const day = String(now.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    }
-
-    function createRecordId() {
-      const now = new Date();
-      const date =
-        now.getFullYear() +
-        String(now.getMonth() + 1).padStart(2, "0") +
-        String(now.getDate()).padStart(2, "0");
-
-      const time =
-        String(now.getHours()).padStart(2, "0") +
-        String(now.getMinutes()).padStart(2, "0") +
-        String(now.getSeconds()).padStart(2, "0");
-
-      return `${date}-${time}`;
-    }
+    let state = loadState();
 
     function blankState() {
       return {
-        schema_version: "1.0",
-        app_version: APP_VERSION,
-        record_id: createRecordId(),
-        site_name: "",
-        operator: localStorage.getItem(OPERATOR_KEY) || "",
-        record_date: todayString(),
+        schema_version: "2.0",
         method: "勾配で計算",
         top_width_m: 2,
         bottom_width_m: 2,
         front_slope: 0.5,
         rear_slope: 0,
-        notes: "",
         points: [],
         updated_at: new Date().toISOString()
       };
     }
 
-    function loadCurrentState() {
-      try {
-        const saved = localStorage.getItem(CURRENT_KEY);
-        if (!saved) return blankState();
+    function storedNumber(value, fallback) {
+      if (value === undefined) return fallback;
+      if (value === null || value === "") return null;
 
-        const parsed = JSON.parse(saved);
-        return {
-          ...blankState(),
-          ...parsed,
-          points: Array.isArray(parsed.points) ? parsed.points : []
-        };
+      const number = Number(value);
+      return Number.isFinite(number) ? number : fallback;
+    }
+
+    function numberOrNull(value) {
+      if (value === "" || value === null || value === undefined) {
+        return null;
+      }
+
+      const number = Number(value);
+      return Number.isFinite(number) ? number : null;
+    }
+
+    function normalizeState(source = {}) {
+      const points = Array.isArray(source.points)
+        ? source.points
+            .map((point) => ({
+              distance_m: numberOrNull(point.distance_m),
+              height_mm: numberOrNull(point.height_mm)
+            }))
+            .filter((point) =>
+              point.distance_m !== null &&
+              point.height_mm !== null
+            )
+        : [];
+
+      return {
+        schema_version: "2.0",
+        method:
+          source.method === "上下幅平均"
+            ? "上下幅平均"
+            : "勾配で計算",
+        top_width_m: storedNumber(source.top_width_m, 2),
+        bottom_width_m: storedNumber(source.bottom_width_m, 2),
+        front_slope: storedNumber(source.front_slope, 0.5),
+        rear_slope: storedNumber(source.rear_slope, 0),
+        points,
+        updated_at:
+          source.updated_at || new Date().toISOString()
+      };
+    }
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (!saved) {
+          return blankState();
+        }
+
+        return normalizeState(JSON.parse(saved));
       } catch (error) {
         return blankState();
       }
     }
 
-    function getRecords() {
+    function saveState() {
+      state.updated_at = new Date().toISOString();
+
       try {
-        return JSON.parse(localStorage.getItem(RECORDS_KEY) || "[]");
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(state)
+        );
       } catch (error) {
-        return [];
+        console.log("端末内保存に失敗しました。");
       }
-    }
-
-    function setRecords(records) {
-      localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
-    }
-
-    function numberOrNull(value) {
-      if (value === "" || value === null || value === undefined) return null;
-
-      const number = Number(value);
-      return Number.isFinite(number) ? number : null;
     }
 
     function formatNumber(value, decimals = 3) {
@@ -828,105 +818,44 @@
       return value.toFixed(decimals);
     }
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
     function showMessage(text, type = "info") {
       const message = document.getElementById("message");
+
       message.textContent = text;
-      message.className = `status-message show ${type}`;
+      message.className = `message show ${type}`;
 
       window.clearTimeout(showMessage.timer);
+
       showMessage.timer = window.setTimeout(() => {
-        message.className = "status-message";
-      }, 4500);
+        message.className = "message";
+      }, 4000);
     }
 
     function showTab(tabId) {
       document.querySelectorAll(".screen").forEach((screen) => {
-        screen.classList.toggle("active", screen.id === tabId);
+        screen.classList.toggle(
+          "active",
+          screen.id === tabId
+        );
       });
 
       document.querySelectorAll(".tab-button").forEach((button) => {
-        button.classList.toggle("active", button.dataset.tab === tabId);
+        button.classList.toggle(
+          "active",
+          button.dataset.tab === tabId
+        );
       });
 
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
 
       if (tabId === "points") {
         window.setTimeout(() => {
           document.getElementById("pointDistance").focus();
-        }, 250);
+        }, 200);
       }
-    }
-
-    function fillFormFromState() {
-      document.getElementById("siteName").value = state.site_name || "";
-      document.getElementById("operator").value = state.operator || "";
-      document.getElementById("recordDate").value =
-        state.record_date || todayString();
-      document.getElementById("method").value =
-        state.method || "勾配で計算";
-
-      document.getElementById("topWidth").value =
-        state.top_width_m ?? "";
-      document.getElementById("bottomWidth").value =
-        state.bottom_width_m ?? "";
-      document.getElementById("frontSlope").value =
-        state.front_slope ?? "";
-      document.getElementById("rearSlope").value =
-        state.rear_slope ?? "";
-      document.getElementById("notes").value = state.notes || "";
-
-      updateMethodFields();
-    }
-
-    function updateStateFromForm() {
-      state.site_name = document.getElementById("siteName").value.trim();
-      state.operator = document.getElementById("operator").value.trim();
-      state.record_date =
-        document.getElementById("recordDate").value || todayString();
-      state.method = document.getElementById("method").value;
-
-      state.top_width_m = numberOrNull(
-        document.getElementById("topWidth").value
-      );
-      state.bottom_width_m = numberOrNull(
-        document.getElementById("bottomWidth").value
-      );
-      state.front_slope = numberOrNull(
-        document.getElementById("frontSlope").value
-      );
-      state.rear_slope = numberOrNull(
-        document.getElementById("rearSlope").value
-      );
-
-      state.notes = document.getElementById("notes").value.trim();
-      state.updated_at = new Date().toISOString();
-
-      if (state.operator) {
-        localStorage.setItem(OPERATOR_KEY, state.operator);
-      }
-
-      autoSave();
-    }
-
-    function autoSave() {
-      localStorage.setItem(CURRENT_KEY, JSON.stringify(state));
-
-      const saveButton = document.getElementById("footerSaveButton");
-      saveButton.textContent = "自動保存済み";
-
-      window.clearTimeout(autoSave.timer);
-      autoSave.timer = window.setTimeout(() => {
-        saveButton.textContent = "端末内に保存";
-      }, 1200);
     }
 
     function updateMethodFields() {
@@ -934,11 +863,59 @@
 
       document
         .getElementById("averageFields")
-        .classList.toggle("hidden", method !== "上下幅平均");
+        .classList.toggle(
+          "hidden",
+          method !== "上下幅平均"
+        );
 
       document
         .getElementById("slopeFields")
-        .classList.toggle("hidden", method === "上下幅平均");
+        .classList.toggle(
+          "hidden",
+          method === "上下幅平均"
+        );
+    }
+
+    function fillFormFromState() {
+      document.getElementById("method").value =
+        state.method;
+
+      document.getElementById("topWidth").value =
+        state.top_width_m ?? "";
+
+      document.getElementById("bottomWidth").value =
+        state.bottom_width_m ?? "";
+
+      document.getElementById("frontSlope").value =
+        state.front_slope ?? "";
+
+      document.getElementById("rearSlope").value =
+        state.rear_slope ?? "";
+
+      updateMethodFields();
+    }
+
+    function updateStateFromForm() {
+      state.method =
+        document.getElementById("method").value;
+
+      state.top_width_m = numberOrNull(
+        document.getElementById("topWidth").value
+      );
+
+      state.bottom_width_m = numberOrNull(
+        document.getElementById("bottomWidth").value
+      );
+
+      state.front_slope = numberOrNull(
+        document.getElementById("frontSlope").value
+      );
+
+      state.rear_slope = numberOrNull(
+        document.getElementById("rearSlope").value
+      );
+
+      saveState();
     }
 
     function validateBasicConditions() {
@@ -976,8 +953,7 @@
       const rows = [];
       let total = 0;
 
-      for (let index = 0; index < state.points.length; index++) {
-        const point = state.points[index];
+      state.points.forEach((point, index) => {
         const heightM = point.height_mm / 1000;
 
         let calculatedWidth;
@@ -988,7 +964,11 @@
         } else {
           calculatedWidth =
             state.top_width_m +
-            (state.front_slope + state.rear_slope) * heightM;
+            (
+              state.front_slope +
+              state.rear_slope
+            ) *
+            heightM;
         }
 
         let area;
@@ -997,7 +977,13 @@
           area = calculatedWidth * heightM;
         } else {
           area =
-            ((state.top_width_m + calculatedWidth) / 2) *
+            (
+              (
+                state.top_width_m +
+                calculatedWidth
+              ) /
+              2
+            ) *
             heightM;
         }
 
@@ -1005,30 +991,39 @@
 
         if (index > 0) {
           const previousRow = rows[index - 1];
-          const distanceDifference =
-            point.distance_m - state.points[index - 1].distance_m;
+          const previousPoint = state.points[index - 1];
 
           section =
-            ((previousRow.area_m2 + area) / 2) *
-            distanceDifference;
+            (
+              (
+                previousRow.area_m2 +
+                area
+              ) /
+              2
+            ) *
+            (
+              point.distance_m -
+              previousPoint.distance_m
+            );
         }
 
         total += section;
 
         rows.push({
-          ...point,
+          distance_m: point.distance_m,
+          height_mm: point.height_mm,
           calc_width_m: calculatedWidth,
           area_m2: area,
           section_m3: section
         });
-      }
+      });
 
       let error = "";
 
-      if (state.points.length < 2) {
-        error = state.points.length === 0
-          ? "測点を追加してください"
-          : "2測点以上入力してください";
+      if (state.points.length === 0) {
+        error = "測点を追加してください";
+      } else if (state.points.length < 2) {
+        error = "2測点以上入力してください";
       }
 
       return {
@@ -1038,100 +1033,159 @@
       };
     }
 
-    function renderCalculation() {
-      const calculation = calculate();
-      const totalText = `${formatNumber(calculation.total)} m³`;
+    function renderCalculation(calculation) {
+      const totalText =
+        `${formatNumber(calculation.total)} m³`;
 
-      document.getElementById("headerTotal").textContent = totalText;
-      document.getElementById("resultTotal").textContent = totalText;
+      document.getElementById("headerTotal").textContent =
+        totalText;
+
+      document.getElementById("resultTotal").textContent =
+        totalText;
+
       document.getElementById("pointCount").textContent =
         state.points.length;
 
-      const status = document.getElementById("calculationStatus");
+      const status =
+        document.getElementById("calculationStatus");
 
-      if (calculation.error) {
+      if (state.points.length === 0) {
+        status.textContent = "未入力";
+        status.style.color = "#64748b";
+      } else if (calculation.error) {
         status.textContent = "入力確認";
         status.style.color = "#c62828";
       } else {
         status.textContent = "計算完了";
         status.style.color = "#2e7d32";
       }
-
-      return calculation;
     }
 
-    function renderPoints() {
-      const calculation = renderCalculation();
-      const list = document.getElementById("pointList");
+    function renderPoints(calculation) {
+      const pointList =
+        document.getElementById("pointList");
 
       if (state.points.length === 0) {
-        list.innerHTML =
-          '<div class="empty">測点はまだ入力されていません。</div>';
+        pointList.innerHTML =
+          '<div class="empty">' +
+          '測点はまだ入力されていません。' +
+          '</div>';
+
         return;
       }
 
-      list.innerHTML = calculation.rows.map((row, index) => `
-        <article class="point-card">
-          <div class="point-card-header">
-            <span class="point-number">No.${index + 1}</span>
-            <strong>${formatNumber(row.section_m3)} m³</strong>
-          </div>
+      pointList.innerHTML = state.points
+        .map((point, index) => {
+          const row = calculation.rows[index];
 
-          <div class="point-values">
-            <div class="point-value">
-              <small>距離</small>
-              <strong>${formatNumber(row.distance_m)} m</strong>
-            </div>
+          const calculatedWidth = row
+            ? formatNumber(row.calc_width_m)
+            : "-";
 
-            <div class="point-value">
-              <small>高さ</small>
-              <strong>${formatNumber(row.height_mm, 0)} mm</strong>
-            </div>
-          </div>
+          const area = row
+            ? formatNumber(row.area_m2)
+            : "-";
 
-          <div class="calculated-values">
-            <div>
-              計算幅<br>
-              <strong>${formatNumber(row.calc_width_m)}</strong>
-            </div>
-            <div>
-              断面積<br>
-              <strong>${formatNumber(row.area_m2)}</strong>
-            </div>
-            <div>
-              区間<br>
-              <strong>${formatNumber(row.section_m3)}</strong>
-            </div>
-          </div>
+          const section = row
+            ? formatNumber(row.section_m3)
+            : "-";
 
-          <div class="point-actions">
-            <button
-              class="button-secondary"
-              data-edit-point="${index}"
-            >修正</button>
+          return `
+            <article class="point-card">
+              <div class="point-card-header">
+                <span class="point-number">
+                  No.${index + 1}
+                </span>
 
-            <button
-              class="button-danger"
-              data-delete-point="${index}"
-            >削除</button>
-          </div>
-        </article>
-      `).join("");
+                <strong>${section} m³</strong>
+              </div>
 
-      list.querySelectorAll("[data-edit-point]").forEach((button) => {
-        button.addEventListener("click", () => {
-          startPointEdit(Number(button.dataset.editPoint));
+              <div class="point-values">
+                <div class="point-value">
+                  <small>距離</small>
+                  <strong>
+                    ${formatNumber(point.distance_m)} m
+                  </strong>
+                </div>
+
+                <div class="point-value">
+                  <small>高さ</small>
+                  <strong>
+                    ${formatNumber(point.height_mm, 0)} mm
+                  </strong>
+                </div>
+              </div>
+
+              <div class="calculated-values">
+                <div>
+                  計算幅<br>
+                  <strong>${calculatedWidth}</strong>
+                </div>
+
+                <div>
+                  断面積<br>
+                  <strong>${area}</strong>
+                </div>
+
+                <div>
+                  区間<br>
+                  <strong>${section}</strong>
+                </div>
+              </div>
+
+              <div class="point-actions">
+                <button
+                  class="button-secondary"
+                  data-edit-point="${index}"
+                >
+                  修正
+                </button>
+
+                <button
+                  class="button-danger"
+                  data-delete-point="${index}"
+                >
+                  削除
+                </button>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+
+      pointList
+        .querySelectorAll("[data-edit-point]")
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            startPointEdit(
+              Number(button.dataset.editPoint)
+            );
+          });
         });
-      });
 
-      list.querySelectorAll("[data-delete-point]").forEach((button) => {
-        button.addEventListener("click", () => {
-          deletePoint(Number(button.dataset.deletePoint));
+      pointList
+        .querySelectorAll("[data-delete-point]")
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            deletePoint(
+              Number(button.dataset.deletePoint)
+            );
+          });
         });
-      });
     }
 
-    function validatePoint(distance, height, indexToReplace = null) {
+    function renderAll() {
+      const calculation = calculate();
+
+      renderCalculation(calculation);
+      renderPoints(calculation);
+    }
+
+    function validatePoint(
+      distance,
+      height,
+      replaceIndex = null
+    ) {
       if (distance === null || height === null) {
         return "距離と高さを同じ測点に入力してください";
       }
@@ -1144,16 +1198,19 @@
         return "高さは0以上で入力してください";
       }
 
-      const testPoints = state.points.map((point) => ({ ...point }));
+      const testPoints = state.points.map((point) => ({
+        ...point
+      }));
+
       const newPoint = {
         distance_m: distance,
         height_mm: height
       };
 
-      if (indexToReplace === null) {
+      if (replaceIndex === null) {
         testPoints.push(newPoint);
       } else {
-        testPoints[indexToReplace] = newPoint;
+        testPoints[replaceIndex] = newPoint;
       }
 
       for (let index = 1; index < testPoints.length; index++) {
@@ -1168,16 +1225,46 @@
       return "";
     }
 
+    function resetPointEditor(clearHeight = false) {
+      editingPointIndex = null;
+
+      document.getElementById("pointEntryTitle").textContent =
+        "測点を追加";
+
+      document.getElementById("addPointButton").textContent =
+        "測点を追加";
+
+      document
+        .getElementById("cancelEditButton")
+        .classList.add("hidden");
+
+      document.getElementById("pointDistance").value = "";
+
+      if (clearHeight) {
+        document.getElementById("pointHeight").value = "";
+      }
+    }
+
     function addOrUpdatePoint() {
       updateStateFromForm();
 
-      const distanceInput = document.getElementById("pointDistance");
-      const heightInput = document.getElementById("pointHeight");
+      const distanceInput =
+        document.getElementById("pointDistance");
 
-      const distance = numberOrNull(distanceInput.value);
-      const height = numberOrNull(heightInput.value);
+      const heightInput =
+        document.getElementById("pointHeight");
 
-      const error = validatePoint(distance, height, editingPointIndex);
+      const distance =
+        numberOrNull(distanceInput.value);
+
+      const height =
+        numberOrNull(heightInput.value);
+
+      const error = validatePoint(
+        distance,
+        height,
+        editingPointIndex
+      );
 
       if (error) {
         showMessage(error, "error");
@@ -1197,16 +1284,13 @@
         showMessage("測点を修正しました", "success");
       }
 
-      const previousHeight = heightInput.value;
+      saveState();
+      resetPointEditor(false);
 
-      cancelPointEdit();
-      distanceInput.value = "";
-      heightInput.value = previousHeight;
+      heightInput.value = height;
       distanceInput.focus();
 
-      state.updated_at = new Date().toISOString();
-      autoSave();
-      renderPoints();
+      renderAll();
     }
 
     function startPointEdit(index) {
@@ -1216,6 +1300,7 @@
 
       document.getElementById("pointDistance").value =
         point.distance_m;
+
       document.getElementById("pointHeight").value =
         point.height_mm;
 
@@ -1232,212 +1317,79 @@
       document.getElementById("pointDistance").focus();
     }
 
-    function cancelPointEdit() {
-      editingPointIndex = null;
-
-      document.getElementById("pointEntryTitle").textContent =
-        "測点を追加";
-
-      document.getElementById("addPointButton").textContent =
-        "測点を追加";
-
-      document
-        .getElementById("cancelEditButton")
-        .classList.add("hidden");
-    }
-
     function deletePoint(index) {
-      if (!confirm(`測点No.${index + 1}を削除してよろしいですか？`)) {
+      if (
+        !confirm(
+          `測点No.${index + 1}を削除してよろしいですか？`
+        )
+      ) {
         return;
       }
 
       state.points.splice(index, 1);
-      cancelPointEdit();
-      autoSave();
-      renderPoints();
+
+      resetPointEditor(true);
+      saveState();
+      renderAll();
+
       showMessage("測点を削除しました", "success");
     }
 
     function loadSample() {
       if (
         state.points.length > 0 &&
-        !confirm("現在の測点をサンプルデータに置き換えますか？")
+        !confirm(
+          "現在の測点をサンプルデータに置き換えますか？"
+        )
       ) {
-        return;
-      }
-
-      state.top_width_m = 2;
-      state.bottom_width_m = 2;
-      state.front_slope = 0.5;
-      state.rear_slope = 0;
-      state.method = "勾配で計算";
-      state.points = [
-        { distance_m: 0, height_mm: 1000 },
-        { distance_m: 2, height_mm: 1000 },
-        { distance_m: 4, height_mm: 1000 },
-        { distance_m: 6, height_mm: 1000 },
-        { distance_m: 8, height_mm: 1000 }
-      ];
-
-      fillFormFromState();
-      autoSave();
-      renderAll();
-      showMessage("Excel確認用のサンプルを読み込みました", "success");
-    }
-
-    function saveProject() {
-      updateStateFromForm();
-
-      if (!state.site_name) {
-        showTab("conditions");
-        showMessage("現場名を入力してください", "error");
-        return;
-      }
-
-      if (!state.operator) {
-        showTab("conditions");
-        showMessage("担当者を入力してください", "error");
-        return;
-      }
-
-      const calculation = calculate();
-
-      if (calculation.error) {
-        showMessage(calculation.error, "error");
-        return;
-      }
-
-      const records = getRecords();
-      const savedRecord = {
-        ...state,
-        saved_total_m3: calculation.total,
-        updated_at: new Date().toISOString()
-      };
-
-      const existingIndex = records.findIndex(
-        (record) => record.record_id === state.record_id
-      );
-
-      if (existingIndex >= 0) {
-        records[existingIndex] = savedRecord;
-      } else {
-        records.unshift(savedRecord);
-      }
-
-      setRecords(records);
-      state = savedRecord;
-      autoSave();
-      renderSavedProjects();
-      showMessage("案件を端末に保存しました", "success");
-    }
-
-    function renderSavedProjects() {
-      const records = getRecords();
-      const list = document.getElementById("savedProjectList");
-
-      if (records.length === 0) {
-        list.innerHTML =
-          '<div class="empty">保存した案件はありません。</div>';
-        return;
-      }
-
-      list.innerHTML = records.map((record) => `
-        <article class="saved-card">
-          <div class="saved-card-title">
-            ${escapeHtml(record.site_name || "名称未設定")}
-          </div>
-
-          <div class="saved-card-detail">
-            ${escapeHtml(record.record_date || "")}
-            ／ ${escapeHtml(record.operator || "")}
-            ／ ${formatNumber(record.saved_total_m3 || 0)} m³
-          </div>
-
-          <div class="button-row">
-            <button
-              class="button-secondary"
-              data-open-record="${escapeHtml(record.record_id)}"
-            >開く</button>
-
-            <button
-              class="button-danger"
-              data-delete-record="${escapeHtml(record.record_id)}"
-            >削除</button>
-          </div>
-        </article>
-      `).join("");
-
-      list.querySelectorAll("[data-open-record]").forEach((button) => {
-        button.addEventListener("click", () => {
-          openRecord(button.dataset.openRecord);
-        });
-      });
-
-      list.querySelectorAll("[data-delete-record]").forEach((button) => {
-        button.addEventListener("click", () => {
-          deleteRecord(button.dataset.deleteRecord);
-        });
-      });
-    }
-
-    function openRecord(recordId) {
-      const record = getRecords().find(
-        (item) => item.record_id === recordId
-      );
-
-      if (!record) {
-        showMessage("保存データを読み込めませんでした", "error");
         return;
       }
 
       state = {
         ...blankState(),
-        ...record,
-        points: Array.isArray(record.points) ? record.points : []
+        method: "勾配で計算",
+        top_width_m: 2,
+        bottom_width_m: 2,
+        front_slope: 0.5,
+        rear_slope: 0,
+        points: [
+          { distance_m: 0, height_mm: 1000 },
+          { distance_m: 2, height_mm: 1000 },
+          { distance_m: 4, height_mm: 1000 },
+          { distance_m: 6, height_mm: 1000 },
+          { distance_m: 8, height_mm: 1000 }
+        ]
       };
 
-      cancelPointEdit();
       fillFormFromState();
-      autoSave();
+      resetPointEditor(true);
+      saveState();
       renderAll();
-      showTab("results");
-      showMessage("保存した案件を開きました", "success");
-    }
 
-    function deleteRecord(recordId) {
-      if (!confirm("この保存案件を削除してよろしいですか？")) {
-        return;
-      }
-
-      const records = getRecords().filter(
-        (record) => record.record_id !== recordId
+      showMessage(
+        "確認用サンプルを読み込みました",
+        "success"
       );
-
-      setRecords(records);
-      renderSavedProjects();
-      showMessage("保存案件を削除しました", "success");
     }
 
-    function newProject() {
+    function newCalculation() {
       if (
         state.points.length > 0 &&
-        !confirm("現在の入力内容を終了して、新規計算を始めますか？")
+        !confirm(
+          "現在の入力内容を消去して、新規計算を始めますか？"
+        )
       ) {
         return;
       }
 
       state = blankState();
-      editingPointIndex = null;
 
-      localStorage.setItem(CURRENT_KEY, JSON.stringify(state));
-
-      document.getElementById("pointDistance").value = "";
-      document.getElementById("pointHeight").value = "";
-
-      cancelPointEdit();
       fillFormFromState();
+      resetPointEditor(true);
+      saveState();
       renderAll();
       showTab("conditions");
+
       showMessage("新規計算を開始しました", "success");
     }
 
@@ -1449,10 +1401,26 @@
         text.includes('"') ||
         text.includes("\n")
       ) {
-        return `"${text.replaceAll('"', '""')}"`;
+        return `"${text.replace(/"/g, '""')}"`;
       }
 
       return text;
+    }
+
+    function fileTimestamp() {
+      const now = new Date();
+
+      const date =
+        now.getFullYear() +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        String(now.getDate()).padStart(2, "0");
+
+      const time =
+        String(now.getHours()).padStart(2, "0") +
+        String(now.getMinutes()).padStart(2, "0") +
+        String(now.getSeconds()).padStart(2, "0");
+
+      return `${date}_${time}`;
     }
 
     function exportCsv() {
@@ -1467,10 +1435,6 @@
 
       const headers = [
         "schema_version",
-        "record_id",
-        "site_name",
-        "operator",
-        "record_date",
         "method",
         "top_width_m",
         "bottom_width_m",
@@ -1483,16 +1447,13 @@
         "area_m2",
         "section_m3",
         "total_m3",
-        "notes",
         "updated_at"
       ];
 
+      const updatedAt = new Date().toISOString();
+
       const rows = calculation.rows.map((row, index) => [
         state.schema_version,
-        state.record_id,
-        state.site_name,
-        state.operator,
-        state.record_date,
         state.method,
         state.top_width_m,
         state.bottom_width_m ?? "",
@@ -1505,37 +1466,36 @@
         row.area_m2,
         row.section_m3,
         calculation.total,
-        state.notes,
-        new Date().toISOString()
+        updatedAt
       ]);
 
       const csv = [
         headers.map(csvEscape).join(","),
-        ...rows.map((row) => row.map(csvEscape).join(","))
+        ...rows.map((row) =>
+          row.map(csvEscape).join(",")
+        )
       ].join("\r\n");
 
       const blob = new Blob(
         ["\ufeff" + csv],
-        { type: "text/csv;charset=utf-8" }
+        {
+          type: "text/csv;charset=utf-8"
+        }
       );
-
-      const safeSiteName =
-        (state.site_name || "残量計算")
-          .replace(/[\\/:*?"<>|]/g, "_");
-
-      const fileName =
-        `${safeSiteName}_${state.record_date}_${state.record_id}.csv`;
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
 
       link.href = url;
-      link.download = fileName;
+      link.download =
+        `VolumeCo_${fileTimestamp()}.csv`;
+
       document.body.appendChild(link);
       link.click();
       link.remove();
 
       URL.revokeObjectURL(url);
+
       showMessage("CSVを出力しました", "success");
     }
 
@@ -1547,11 +1507,18 @@
 
       const source = text.replace(/^\ufeff/, "");
 
-      for (let index = 0; index < source.length; index++) {
+      for (
+        let index = 0;
+        index < source.length;
+        index++
+      ) {
         const character = source[index];
 
         if (quoted) {
-          if (character === '"' && source[index + 1] === '"') {
+          if (
+            character === '"' &&
+            source[index + 1] === '"'
+          ) {
             field += '"';
             index++;
           } else if (character === '"') {
@@ -1575,7 +1542,10 @@
       }
 
       row.push(field.replace(/\r$/, ""));
-      if (row.some((value) => value !== "")) rows.push(row);
+
+      if (row.some((value) => value !== "")) {
+        rows.push(row);
+      }
 
       return rows;
     }
@@ -1590,275 +1560,232 @@
         }
 
         const headers = rows[0];
-        const dataRows = rows.slice(1).filter((row) => row.length > 1);
+        const dataRows = rows
+          .slice(1)
+          .filter((row) => row.length > 1);
 
-        const column = (name) => headers.indexOf(name);
+        const column = (name) =>
+          headers.indexOf(name);
+
         const required = [
-          "record_id",
-          "site_name",
-          "operator",
           "method",
+          "top_width_m",
           "distance_m",
           "height_mm"
         ];
 
-        if (required.some((name) => column(name) < 0)) {
-          throw new Error("対応していないCSV形式です");
+        if (
+          required.some((name) => column(name) < 0)
+        ) {
+          throw new Error(
+            "対応していないCSV形式です"
+          );
         }
 
-        const first = dataRows[0];
-        const value = (row, name) => row[column(name)] ?? "";
+        const value = (row, name) =>
+          row[column(name)] ?? "";
 
-        const imported = blankState();
+        const firstRow = dataRows[0];
 
-        imported.schema_version =
-          value(first, "schema_version") || "1.0";
-        imported.record_id =
-          value(first, "record_id") || createRecordId();
-        imported.site_name = value(first, "site_name");
-        imported.operator = value(first, "operator");
-        imported.record_date =
-          value(first, "record_date") || todayString();
-        imported.method =
-          value(first, "method") || "勾配で計算";
-        imported.top_width_m =
-          numberOrNull(value(first, "top_width_m"));
-        imported.bottom_width_m =
-          numberOrNull(value(first, "bottom_width_m"));
-        imported.front_slope =
-          numberOrNull(value(first, "front_slope"));
-        imported.rear_slope =
-          numberOrNull(value(first, "rear_slope"));
-        imported.notes = value(first, "notes");
+        const importedPoints = dataRows
+          .map((row, index) => ({
+            point_no:
+              numberOrNull(value(row, "point_no")) ??
+              index + 1,
+            distance_m:
+              numberOrNull(value(row, "distance_m")),
+            height_mm:
+              numberOrNull(value(row, "height_mm"))
+          }))
+          .filter((point) =>
+            point.distance_m !== null &&
+            point.height_mm !== null
+          )
+          .sort((a, b) => a.point_no - b.point_no)
+          .map((point) => ({
+            distance_m: point.distance_m,
+            height_mm: point.height_mm
+          }));
 
-        imported.points = dataRows.map((row) => ({
-          distance_m: numberOrNull(value(row, "distance_m")),
-          height_mm: numberOrNull(value(row, "height_mm"))
-        })).filter((point) =>
-          point.distance_m !== null &&
-          point.height_mm !== null
-        );
-
-        state = imported;
-
-        if (state.operator) {
-          localStorage.setItem(OPERATOR_KEY, state.operator);
+        for (
+          let index = 1;
+          index < importedPoints.length;
+          index++
+        ) {
+          if (
+            importedPoints[index].distance_m <=
+            importedPoints[index - 1].distance_m
+          ) {
+            throw new Error(
+              "CSVの距離が昇順になっていません"
+            );
+          }
         }
+
+        state = normalizeState({
+          method: value(firstRow, "method"),
+          top_width_m:
+            numberOrNull(
+              value(firstRow, "top_width_m")
+            ),
+          bottom_width_m:
+            numberOrNull(
+              value(firstRow, "bottom_width_m")
+            ),
+          front_slope:
+            numberOrNull(
+              value(firstRow, "front_slope")
+            ),
+          rear_slope:
+            numberOrNull(
+              value(firstRow, "rear_slope")
+            ),
+          points: importedPoints
+        });
 
         fillFormFromState();
-        autoSave();
+        resetPointEditor(true);
+        saveState();
         renderAll();
         showTab("results");
-        showMessage("CSVから案件を読み込みました", "success");
+
+        showMessage(
+          "CSVからデータを読み込みました",
+          "success"
+        );
       } catch (error) {
-        showMessage(error.message || "CSVを読み込めませんでした", "error");
+        showMessage(
+          error.message ||
+            "CSVを読み込めませんでした",
+          "error"
+        );
       } finally {
-        document.getElementById("csvFileInput").value = "";
+        document.getElementById(
+          "csvFileInput"
+        ).value = "";
       }
     }
 
-    function showInstallGuide() {
-      alert(
-        "ホーム画面への追加方法\n\n" +
-        "iPhone：Safari下部の共有ボタン →「ホーム画面に追加」\n\n" +
-        "Android：Chrome右上のメニュー →「ホーム画面に追加」または「アプリをインストール」"
-      );
-    }
-
-      let connectionCheckId = 0;
-
-async function canAccessInternet() {
-  if (!navigator.onLine) return false;
-
-  const controller = new AbortController();
-  const timeoutId = window.setTimeout(
-    () => controller.abort(),
-    4000
-  );
-
-  try {
-    const response = await fetch(
-      `./manifest.webmanifest?online-check=${Date.now()}`,
-      {
-        method: "HEAD",
-        cache: "no-store",
-        signal: controller.signal
-      }
-    );
-
-    return response.ok;
-  } catch (error) {
-    return false;
-  } finally {
-    window.clearTimeout(timeoutId);
-  }
-}
-
-async function updateConnectionStatus() {
-  const checkId = ++connectionCheckId;
-  const status = document.getElementById("connectionStatus");
-
-  status.textContent = "確認中";
-  status.style.background = "rgba(100,116,139,0.78)";
-
-  const isOnline = await canAccessInternet();
-
-  if (checkId !== connectionCheckId) return;
-
-  if (isOnline) {
-    status.textContent = "オンライン";
-    status.style.background = "rgba(46,125,50,0.75)";
-  } else {
-    status.textContent = "オフライン";
-    status.style.background = "rgba(198,40,40,0.78)";
-  }
-}
-
-    function renderAll() {
-      updateMethodFields();
-      renderPoints();
-      renderSavedProjects();
-      renderCalculation();
-    }
-
-    document.querySelectorAll(".tab-button").forEach((button) => {
-      button.addEventListener("click", () => {
-        showTab(button.dataset.tab);
+    document
+      .querySelectorAll(".tab-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          showTab(button.dataset.tab);
+        });
       });
-    });
 
     [
-      "siteName",
-      "operator",
-      "recordDate",
       "method",
       "topWidth",
       "bottomWidth",
       "frontSlope",
-      "rearSlope",
-      "notes"
+      "rearSlope"
     ].forEach((id) => {
       const element = document.getElementById(id);
 
       element.addEventListener("input", () => {
         updateStateFromForm();
         updateMethodFields();
-        renderPoints();
+        renderAll();
       });
 
       element.addEventListener("change", () => {
         updateStateFromForm();
         updateMethodFields();
-        renderPoints();
+        renderAll();
       });
     });
 
-    document.getElementById("toPointsButton").addEventListener("click", () => {
-      updateStateFromForm();
+    document
+      .getElementById("toPointsButton")
+      .addEventListener("click", () => {
+        updateStateFromForm();
 
-      const error = validateBasicConditions();
+        const error = validateBasicConditions();
 
-      if (error) {
-        showMessage(error, "error");
-        return;
-      }
+        if (error) {
+          showMessage(error, "error");
+          return;
+        }
 
-      showTab("points");
-    });
+        showTab("points");
+      });
 
-    document.getElementById("toResultsButton").addEventListener("click", () => {
-      updateStateFromForm();
-      renderCalculation();
-      showTab("results");
-    });
+    document
+      .getElementById("toResultsButton")
+      .addEventListener("click", () => {
+        updateStateFromForm();
+        renderAll();
+        showTab("results");
+      });
 
-    document.getElementById("footerResultButton").addEventListener("click", () => {
-      updateStateFromForm();
-      renderCalculation();
-      showTab("results");
-    });
+    document
+      .getElementById("addPointButton")
+      .addEventListener(
+        "click",
+        addOrUpdatePoint
+      );
 
-    document.getElementById("footerSaveButton").addEventListener("click", () => {
-      updateStateFromForm();
-      showMessage("入力内容は端末内に自動保存されています", "success");
-    });
+    document
+      .getElementById("cancelEditButton")
+      .addEventListener("click", () => {
+        resetPointEditor(true);
+      });
 
-    document.getElementById("addPointButton").addEventListener(
-      "click",
-      addOrUpdatePoint
-    );
+    document
+      .getElementById("sampleButton")
+      .addEventListener(
+        "click",
+        loadSample
+      );
 
-    document.getElementById("cancelEditButton").addEventListener(
-      "click",
-      () => {
-        cancelPointEdit();
-        document.getElementById("pointDistance").value = "";
-        document.getElementById("pointHeight").value = "";
-      }
-    );
+    document
+      .getElementById("exportCsvButton")
+      .addEventListener(
+        "click",
+        exportCsv
+      );
 
-    document.getElementById("sampleButton").addEventListener(
-      "click",
-      loadSample
-    );
+    document
+      .getElementById("importCsvButton")
+      .addEventListener("click", () => {
+        document.getElementById(
+          "csvFileInput"
+        ).click();
+      });
 
-    document.getElementById("saveProjectButton").addEventListener(
-      "click",
-      saveProject
-    );
-
-    document.getElementById("newProjectButton").addEventListener(
-      "click",
-      newProject
-    );
-
-    document.getElementById("exportCsvButton").addEventListener(
-      "click",
-      exportCsv
-    );
-
-    document.getElementById("importCsvButton").addEventListener(
-      "click",
-      () => document.getElementById("csvFileInput").click()
-    );
-
-    document.getElementById("csvFileInput").addEventListener(
-      "change",
-      (event) => {
+    document
+      .getElementById("csvFileInput")
+      .addEventListener("change", (event) => {
         const file = event.target.files[0];
-        if (file) importCsv(file);
-      }
-    );
 
-    document.getElementById("installGuideButton").addEventListener(
-      "click",
-      showInstallGuide
-    );
+        if (file) {
+          importCsv(file);
+        }
+      });
 
-window.addEventListener("online", updateConnectionStatus);
-window.addEventListener("offline", updateConnectionStatus);
+    document
+      .getElementById("newCalculationButton")
+      .addEventListener(
+        "click",
+        newCalculation
+      );
 
-window.addEventListener("pageshow", updateConnectionStatus);
-
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) {
-    updateConnectionStatus();
-  }
-});
-
-window.setInterval(updateConnectionStatus, 60000);
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {
-      console.log("Service Workerは次の工程で追加します。");
-    });
-  });
-}
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .catch((error) => {
+            console.log(
+              "Service Worker登録エラー",
+              error
+            );
+          });
+      });
+    }
 
     fillFormFromState();
     renderAll();
-    updateConnectionStatus();
   </script>
 </body>
 </html>
