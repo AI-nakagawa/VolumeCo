@@ -1665,16 +1665,54 @@
     }
 
     function updateConnectionStatus() {
-      const status = document.getElementById("connectionStatus");
+      let connectionCheckId = 0;
 
-      if (navigator.onLine) {
-        status.textContent = "オンライン";
-        status.style.background = "rgba(46,125,50,0.75)";
-      } else {
-        status.textContent = "オフライン";
-        status.style.background = "rgba(198,40,40,0.78)";
+async function canAccessInternet() {
+  if (!navigator.onLine) return false;
+
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(
+    () => controller.abort(),
+    4000
+  );
+
+  try {
+    const response = await fetch(
+      `./manifest.webmanifest?online-check=${Date.now()}`,
+      {
+        method: "HEAD",
+        cache: "no-store",
+        signal: controller.signal
       }
-    }
+    );
+
+    return response.ok;
+  } catch (error) {
+    return false;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
+async function updateConnectionStatus() {
+  const checkId = ++connectionCheckId;
+  const status = document.getElementById("connectionStatus");
+
+  status.textContent = "確認中";
+  status.style.background = "rgba(100,116,139,0.78)";
+
+  const isOnline = await canAccessInternet();
+
+  if (checkId !== connectionCheckId) return;
+
+  if (isOnline) {
+    status.textContent = "オンライン";
+    status.style.background = "rgba(46,125,50,0.75)";
+  } else {
+    status.textContent = "オフライン";
+    status.style.background = "rgba(198,40,40,0.78)";
+  }
+}
 
     function renderAll() {
       updateMethodFields();
@@ -1797,16 +1835,26 @@
       showInstallGuide
     );
 
-    window.addEventListener("online", updateConnectionStatus);
-    window.addEventListener("offline", updateConnectionStatus);
+window.addEventListener("online", updateConnectionStatus);
+window.addEventListener("offline", updateConnectionStatus);
 
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch(() => {
-          console.log("Service Workerは次の工程で追加します。");
-        });
-      });
-    }
+window.addEventListener("pageshow", updateConnectionStatus);
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    updateConnectionStatus();
+  }
+});
+
+window.setInterval(updateConnectionStatus, 60000);
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {
+      console.log("Service Workerは次の工程で追加します。");
+    });
+  });
+}
 
     fillFormFromState();
     renderAll();
