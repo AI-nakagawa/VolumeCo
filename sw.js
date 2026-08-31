@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "volumeco-v0.1.0";
+const CACHE_NAME = "volumeco-v0.1.1";
 
 const BASE_URL = new URL("./", self.location.href);
 const INDEX_URL = new URL("index.html", BASE_URL).href;
