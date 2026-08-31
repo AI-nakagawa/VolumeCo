@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "コンクリート残量計算",
+  "short_name": "残量計算",
+  "description": "コンクリート残量をオフラインで計算・保存するアプリ",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef3f7",
+  "theme_color": "#1f4e78",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
