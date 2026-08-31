@@ -1,37 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-  <meta name="theme-color" content="#1f4e78">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17365d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
-  >
-  <meta
-    name="apple-mobile-web-app-title"
-    content="残量計算"
-  >
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
 
-  <title>コンクリート残量計算</title>
+  <title>VolumeCo</title>
+
   <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg">
+  <link rel="apple-touch-icon" href="./icon.svg">
 
   <style>
     :root {
-      --navy: #1f4e78;
-      --blue: #2f75b5;
-      --light-blue: #d9eaf7;
-      --green: #2e7d32;
-      --light-green: #e8f5e9;
-      --yellow: #fff4c4;
-      --red: #c62828;
-      --gray: #64748b;
-      --light-gray: #f1f5f9;
-      --border: #cbd5e1;
+      --navy: #17365d;
+      --blue: #0070c0;
+      --light-blue: #eaf4fb;
+      --border: #ccd5df;
+      --background: #f3f5f7;
+      --text: #1f2933;
+      --muted: #64748b;
+      --danger: #c00000;
+      --success: #237a3b;
       --white: #ffffff;
     }
 
@@ -43,746 +36,599 @@
     body {
       margin: 0;
       min-height: 100vh;
-      color: #1e293b;
-      background: #eef3f7;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Yu Gothic",
-        "Hiragino Kaku Gothic ProN",
-        "Segoe UI",
-        sans-serif;
-      font-size: 16px;
+      background: var(--background);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      padding-bottom: calc(30px + env(safe-area-inset-bottom));
     }
 
     button,
     input,
     select {
       font: inherit;
-    }
-
-    button {
-      min-height: 48px;
-      padding: 10px 14px;
-      border: 0;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
       touch-action: manipulation;
     }
 
-    button:active {
-      transform: scale(0.98);
+    header {
+      background: var(--navy);
+      color: var(--white);
+      padding: calc(16px + env(safe-area-inset-top)) 18px 17px;
+    }
+
+    .header-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 27px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .version {
+      white-space: nowrap;
+      font-size: 12px;
+      opacity: 0.85;
+    }
+
+    main {
+      width: min(100%, 720px);
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 17px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 20px;
+      color: var(--navy);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 700;
+      font-size: 15px;
     }
 
     input,
     select {
       width: 100%;
-      min-height: 52px;
-      padding: 10px 12px;
+      min-height: 62px;
       border: 2px solid var(--border);
-      border-radius: 10px;
+      border-radius: 11px;
       background: var(--white);
-      font-size: 18px;
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 22px;
+      text-align: right;
+      outline: none;
+    }
+
+    select {
+      min-height: 70px;
+      text-align: left;
+      font-size: 19px;
+      font-weight: 700;
     }
 
     input:focus,
     select:focus {
       border-color: var(--blue);
-      outline: 3px solid rgba(47, 117, 181, 0.16);
+      box-shadow: 0 0 0 3px rgba(0, 112, 192, 0.14);
     }
 
-    input[type="number"] {
-      text-align: right;
+    input:disabled {
+      color: #8a96a3;
+      background: #edf0f3;
     }
 
-    .app-header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      padding:
-        max(10px, env(safe-area-inset-top))
-        12px 10px;
-      color: var(--white);
-      background: var(--navy);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    .unit-wrap {
+      position: relative;
     }
 
-    .header-inner {
-      max-width: 760px;
-      margin: auto;
-    }
-
-    .app-title {
-      margin: 0;
-      font-size: 19px;
-    }
-
-    .total-bar {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-top: 9px;
-      padding: 9px 13px;
-      color: #16324f;
-      background: var(--light-green);
-      border-radius: 11px;
-    }
-
-    .total-label {
-      font-weight: 700;
-    }
-
-    .total-value {
-      color: var(--green);
-      font-size: 25px;
-      font-weight: 800;
-    }
-
-    .tabs {
-      position: sticky;
-      top: 104px;
-      z-index: 15;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      max-width: 760px;
-      margin: auto;
-      padding: 8px 10px;
-      background: #eef3f7;
-    }
-
-    .tab-button {
-      min-height: 44px;
-      padding: 7px 4px;
-      color: var(--navy);
-      background: var(--white);
-      border: 1px solid var(--border);
-      font-size: 14px;
-    }
-
-    .tab-button.active {
-      color: var(--white);
-      background: var(--blue);
-      border-color: var(--blue);
-    }
-
-    main {
-      max-width: 760px;
-      margin: auto;
-      padding: 6px 10px 30px;
-    }
-
-    .screen {
-      display: none;
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    .card {
-      margin-bottom: 12px;
-      padding: 16px;
-      background: var(--white);
-      border-radius: 14px;
-      box-shadow: 0 2px 7px rgba(15, 23, 42, 0.08);
-    }
-
-    .card h2 {
-      margin: 0 0 14px;
-      padding-bottom: 8px;
-      color: var(--navy);
-      border-bottom: 2px solid var(--light-blue);
-      font-size: 18px;
-    }
-
-    .field {
-      margin-bottom: 15px;
-    }
-
-    .field:last-child {
-      margin-bottom: 0;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .required::after {
-      content: " 必須";
-      color: var(--red);
-      font-size: 11px;
-    }
-
-    .unit-field {
-      display: grid;
-      grid-template-columns: 1fr 58px;
-      gap: 7px;
-      align-items: center;
+    .unit-wrap input {
+      padding-right: 43px;
     }
 
     .unit {
-      color: var(--gray);
-      text-align: center;
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
       font-weight: 700;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      pointer-events: none;
     }
 
     .notice {
-      margin-bottom: 12px;
-      padding: 11px 12px;
-      border-radius: 10px;
-      background: var(--light-blue);
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .message {
-      display: none;
-      margin-bottom: 12px;
+      margin: 0 0 15px;
       padding: 12px;
       border-radius: 10px;
+      background: var(--light-blue);
+      color: #174b73;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .result-card {
+      background: linear-gradient(135deg, #17365d, #24598d);
+      color: var(--white);
+      text-align: center;
+      border: none;
+    }
+
+    .result-label {
+      margin-bottom: 5px;
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .result-value {
+      font-size: clamp(42px, 12vw, 62px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+    }
+
+    .result-unit {
+      margin-left: 5px;
+      font-size: 22px;
       font-weight: 700;
     }
 
-    .message.show {
-      display: block;
+    .result-status {
+      min-height: 22px;
+      margin-top: 10px;
+      font-size: 14px;
     }
 
-    .message.info {
-      color: #1e4f7a;
-      background: var(--light-blue);
+    .result-status.ok {
+      color: #d8f8df;
     }
 
-    .message.success {
-      color: #1b5e20;
-      background: var(--light-green);
+    .result-status.warning {
+      color: #ffe5a8;
     }
 
-    .message.error {
-      color: #8b1a1a;
-      background: #ffebee;
+    .button {
+      width: 100%;
+      min-height: 58px;
+      border: 0;
+      border-radius: 11px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: 800;
     }
 
-    .button-primary {
-      color: var(--white);
+    .button.primary {
       background: var(--blue);
-    }
-
-    .button-success {
       color: var(--white);
-      background: var(--green);
     }
 
-    .button-secondary {
-      color: var(--navy);
-      background: var(--light-blue);
+    .button.secondary {
+      background: #e6ebf0;
+      color: var(--text);
     }
 
-    .button-danger {
-      color: var(--white);
-      background: var(--red);
+    .button.danger {
+      background: #fff0f0;
+      color: var(--danger);
+      border: 1px solid #edb5b5;
     }
 
-    .button-neutral {
-      color: #334155;
-      background: var(--light-gray);
-      border: 1px solid var(--border);
+    .button:active {
+      transform: scale(0.985);
     }
 
     .button-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
     }
 
-    .button-full {
-      width: 100%;
-      margin-top: 12px;
+    .button-row.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .point-entry {
-      padding: 14px;
-      background: var(--yellow);
-      border: 2px solid #edd269;
-      border-radius: 12px;
+    .error {
+      min-height: 22px;
+      margin-top: 10px;
+      color: var(--danger);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
     }
 
     .point-list {
       display: grid;
-      gap: 10px;
+      gap: 11px;
     }
 
     .point-card {
-      padding: 12px;
-      background: var(--white);
       border: 1px solid var(--border);
-      border-left: 5px solid var(--blue);
-      border-radius: 10px;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    .point-card-header {
+    .point-head {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      margin-bottom: 8px;
+      align-items: center;
+      background: #eef2f6;
+      padding: 10px 12px;
     }
 
     .point-number {
       color: var(--navy);
-      font-size: 18px;
       font-weight: 800;
     }
 
-    .point-values {
+    .point-data {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 7px;
-      margin-bottom: 8px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 13px;
     }
 
     .point-value {
-      padding: 8px;
-      background: var(--light-gray);
-      border-radius: 8px;
-      text-align: center;
+      min-width: 0;
     }
 
     .point-value small {
       display: block;
-      margin-bottom: 2px;
-      color: var(--gray);
-    }
-
-    .calculated-values {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 5px;
-      margin-bottom: 8px;
+      margin-bottom: 3px;
+      color: var(--muted);
       font-size: 12px;
     }
 
-    .calculated-values div {
-      padding: 7px 3px;
-      background: var(--light-blue);
-      border-radius: 7px;
-      text-align: center;
+    .point-value strong {
+      display: block;
+      font-size: 17px;
+      overflow-wrap: anywhere;
     }
 
     .point-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 7px;
-    }
-
-    .point-actions button {
-      min-height: 42px;
-      padding: 6px;
-      font-size: 14px;
-    }
-
-    .result-total {
-      padding: 20px 10px;
-      color: var(--green);
-      background: var(--light-green);
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .result-total small {
-      display: block;
-      color: #355c38;
-      font-weight: 700;
-    }
-
-    .result-total strong {
-      display: block;
-      margin-top: 4px;
-      font-size: 38px;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 10px;
+      padding: 0 13px 13px;
     }
 
-    .summary-box {
-      padding: 12px 6px;
-      background: var(--light-gray);
+    .small-button {
+      min-height: 47px;
+      border: 0;
       border-radius: 9px;
-      text-align: center;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    .summary-box small {
-      display: block;
-      color: var(--gray);
+    .edit-button {
+      background: #e6f2fb;
+      color: #005a9e;
     }
 
-    .summary-box strong {
-      display: block;
-      margin-top: 4px;
-      font-size: 18px;
+    .delete-button {
+      background: #fff0f0;
+      color: var(--danger);
     }
 
     .empty {
-      padding: 20px;
-      color: var(--gray);
+      padding: 20px 10px;
+      color: var(--muted);
       text-align: center;
+      line-height: 1.6;
     }
 
     .hidden {
       display: none !important;
     }
 
-    .version {
-      margin: 16px 0 4px;
-      color: var(--gray);
+    .toast {
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: calc(22px + env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(20px);
+      max-width: calc(100% - 30px);
+      padding: 12px 18px;
+      border-radius: 100px;
+      background: rgba(20, 30, 40, 0.94);
+      color: white;
       text-align: center;
-      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s;
     }
 
-    @media (max-width: 420px) {
-      .grid-2 {
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 520px) {
+      main {
+        padding: 11px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .button-row.three {
         grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .total-value {
-        font-size: 22px;
-      }
-
-      .calculated-values {
-        font-size: 11px;
       }
     }
   </style>
 </head>
 
 <body>
-  <header class="app-header">
+  <header>
     <div class="header-inner">
-      <h1 class="app-title">コンクリート残量計算</h1>
-
-      <div class="total-bar">
-        <span class="total-label">合計数量</span>
-        <span id="headerTotal" class="total-value">0.000 m³</span>
+      <div>
+        <h1>VolumeCo</h1>
+        <p class="subtitle">コンクリート残量計算</p>
       </div>
+      <div class="version">Version 0.3</div>
     </div>
   </header>
 
-  <nav class="tabs">
-    <button class="tab-button active" data-tab="conditions">
-      1. 基本条件
-    </button>
-
-    <button class="tab-button" data-tab="points">
-      2. 測点入力
-    </button>
-
-    <button class="tab-button" data-tab="results">
-      3. 計算結果
-    </button>
-  </nav>
-
   <main>
-    <div id="message" class="message"></div>
+    <section class="card">
+      <h2>基本条件</h2>
 
-    <section id="conditions" class="screen active">
-      <div class="card">
-        <h2>基本条件</h2>
-
+      <div class="grid">
         <div class="field">
-          <label for="method" class="required">計算方式</label>
-          <select id="method">
-            <option value="勾配で計算">勾配で計算</option>
-            <option value="上下幅平均">上下幅平均</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="topWidth" class="required">上幅</label>
-
-          <div class="unit-field">
-            <input
-              id="topWidth"
-              type="number"
-              inputmode="decimal"
-              step="0.001"
-            >
+          <label for="topWidth">上幅</label>
+          <div class="unit-wrap">
+            <input id="topWidth" type="number" inputmode="decimal" step="any">
             <span class="unit">m</span>
           </div>
         </div>
 
-        <div id="averageFields" class="hidden">
-          <div class="field">
-            <label for="bottomWidth" class="required">下幅</label>
+        <div class="field">
+          <label for="bottomWidth">下幅</label>
+          <div class="unit-wrap">
+            <input id="bottomWidth" type="number" inputmode="decimal" step="any">
+            <span class="unit">m</span>
+          </div>
+        </div>
 
-            <div class="unit-field">
+        <div class="field">
+          <label for="frontSlope">前勾配</label>
+          <div class="unit-wrap">
+            <input id="frontSlope" type="number" inputmode="decimal" step="any">
+            <span class="unit">n</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="rearSlope">後勾配</label>
+          <div class="unit-wrap">
+            <input id="rearSlope" type="number" inputmode="decimal" step="any">
+            <span class="unit">n</span>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label for="calculationMethod">計算方式</label>
+          <select id="calculationMethod">
+            <option value="勾配で計算">勾配で計算</option>
+            <option value="上下幅平均">上下幅平均</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="card result-card">
+      <div class="result-label">合計数量</div>
+      <div>
+        <span id="totalValue" class="result-value">0.000</span>
+        <span class="result-unit">m³</span>
+      </div>
+      <div id="resultStatus" class="result-status warning">
+        2測点以上入力してください
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>測点入力</h2>
+
+      <p class="notice">
+        区間長は、直前の測点からの長さです。1測点目は「0」、2測点目以降は各区間の長さを入力してください。
+      </p>
+
+      <form id="pointForm">
+        <div class="grid">
+          <div class="field">
+            <label for="sectionLength">区間長</label>
+            <div class="unit-wrap">
               <input
-                id="bottomWidth"
+                id="sectionLength"
                 type="number"
                 inputmode="decimal"
-                step="0.001"
+                step="any"
+                required
               >
               <span class="unit">m</span>
             </div>
           </div>
-        </div>
 
-        <div id="slopeFields">
-          <div class="grid-2">
-            <div class="field">
-              <label for="frontSlope" class="required">前勾配 n</label>
-
+          <div class="field">
+            <label for="heightMm">高さ</label>
+            <div class="unit-wrap">
               <input
-                id="frontSlope"
+                id="heightMm"
                 type="number"
                 inputmode="decimal"
-                step="0.001"
+                step="any"
+                required
               >
-            </div>
-
-            <div class="field">
-              <label for="rearSlope" class="required">後勾配 n</label>
-
-              <input
-                id="rearSlope"
-                type="number"
-                inputmode="decimal"
-                step="0.001"
-              >
+              <span class="unit">mm</span>
             </div>
           </div>
         </div>
-
-        <button
-          id="toPointsButton"
-          class="button-primary button-full"
-        >
-          次へ：測点入力
-        </button>
-      </div>
-    </section>
-
-    <section id="points" class="screen">
-      <div class="notice">
-        距離は始点からの累積値を入力してください。
-        距離と高さは同じ測点に入力します。
-      </div>
-
-      <div class="card">
-        <h2 id="pointEntryTitle">測点を追加</h2>
-
-        <div class="point-entry">
-          <div class="grid-2">
-            <div class="field">
-              <label for="pointDistance" class="required">距離</label>
-
-              <div class="unit-field">
-                <input
-                  id="pointDistance"
-                  type="number"
-                  inputmode="decimal"
-                  step="0.001"
-                  placeholder="0.000"
-                >
-                <span class="unit">m</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="pointHeight" class="required">高さ</label>
-
-              <div class="unit-field">
-                <input
-                  id="pointHeight"
-                  type="number"
-                  inputmode="decimal"
-                  step="1"
-                  placeholder="1000"
-                >
-                <span class="unit">mm</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="button-row">
-            <button
-              id="addPointButton"
-              class="button-success"
-            >
-              測点を追加
-            </button>
-
-            <button
-              id="cancelEditButton"
-              class="button-neutral hidden"
-            >
-              修正を中止
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>入力済み測点</h2>
-        <div id="pointList" class="point-list"></div>
-      </div>
-
-      <div class="button-row">
-        <button
-          id="sampleButton"
-          class="button-secondary"
-        >
-          サンプル読込
-        </button>
-
-        <button
-          id="toResultsButton"
-          class="button-primary"
-        >
-          計算結果を確認
-        </button>
-      </div>
-    </section>
-
-    <section id="results" class="screen">
-      <div class="card">
-        <h2>計算結果</h2>
-
-        <div class="result-total">
-          <small>合計数量</small>
-          <strong id="resultTotal">0.000 m³</strong>
-        </div>
-
-        <div class="summary-grid">
-          <div class="summary-box">
-            <small>測点数</small>
-            <strong id="pointCount">0</strong>
-          </div>
-
-          <div class="summary-box">
-            <small>計算状態</small>
-            <strong id="calculationStatus">未入力</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>データ操作</h2>
 
         <div class="button-row">
-          <button
-            id="exportCsvButton"
-            class="button-primary"
-          >
-            CSV出力
+          <button id="pointSubmitButton" class="button primary" type="submit">
+            測点を追加
           </button>
-
           <button
-            id="importCsvButton"
-            class="button-secondary"
+            id="cancelEditButton"
+            class="button secondary hidden"
+            type="button"
           >
-            CSV読込
+            編集を中止
           </button>
         </div>
 
-        <input
-          id="csvFileInput"
-          class="hidden"
-          type="file"
-          accept=".csv,text/csv"
-        >
+        <div id="pointError" class="error"></div>
+      </form>
+    </section>
 
-        <button
-          id="newCalculationButton"
-          class="button-danger button-full"
-        >
+    <section class="card">
+      <div class="section-title">
+        <h2>測点一覧</h2>
+        <div id="pointCount" class="count">0測点</div>
+      </div>
+
+      <div id="pointList" class="point-list"></div>
+    </section>
+
+    <section class="card">
+      <h2>データ操作</h2>
+
+      <div class="button-row three">
+        <button id="csvExportButton" class="button primary" type="button">
+          CSV出力
+        </button>
+
+        <button id="csvImportButton" class="button secondary" type="button">
+          CSV読込
+        </button>
+
+        <button id="newCalculationButton" class="button danger" type="button">
           新規計算
         </button>
       </div>
 
-      <div class="version">VolumeCo Version 0.2</div>
+      <input
+        id="csvFileInput"
+        class="hidden"
+        type="file"
+        accept=".csv,text/csv"
+      >
     </section>
   </main>
+
+  <div id="toast" class="toast"></div>
 
   <script>
     "use strict";
 
-    const APP_VERSION = "0.2";
-    const STORAGE_KEY = "volumeco_current";
+    const APP_VERSION = "0.3";
+    const STORAGE_KEY = "volumeco_current_v03";
 
-    let editingPointIndex = null;
-    let state = loadState();
+    const elements = {
+      topWidth: document.getElementById("topWidth"),
+      bottomWidth: document.getElementById("bottomWidth"),
+      frontSlope: document.getElementById("frontSlope"),
+      rearSlope: document.getElementById("rearSlope"),
+      calculationMethod: document.getElementById("calculationMethod"),
 
-    function blankState() {
+      totalValue: document.getElementById("totalValue"),
+      resultStatus: document.getElementById("resultStatus"),
+
+      pointForm: document.getElementById("pointForm"),
+      sectionLength: document.getElementById("sectionLength"),
+      heightMm: document.getElementById("heightMm"),
+      pointSubmitButton: document.getElementById("pointSubmitButton"),
+      cancelEditButton: document.getElementById("cancelEditButton"),
+      pointError: document.getElementById("pointError"),
+
+      pointCount: document.getElementById("pointCount"),
+      pointList: document.getElementById("pointList"),
+
+      csvExportButton: document.getElementById("csvExportButton"),
+      csvImportButton: document.getElementById("csvImportButton"),
+      newCalculationButton: document.getElementById("newCalculationButton"),
+      csvFileInput: document.getElementById("csvFileInput"),
+      toast: document.getElementById("toast")
+    };
+
+    function createInitialState(includeSample = true) {
       return {
-        schema_version: "2.0",
-        method: "勾配で計算",
-        top_width_m: 2,
-        bottom_width_m: 2,
-        front_slope: 0.5,
-        rear_slope: 0,
-        points: [],
+        version: APP_VERSION,
+        conditions: {
+          top_width_m: 2,
+          bottom_width_m: 2,
+          front_slope_n: 0.5,
+          rear_slope_n: 0,
+          calc_method: "勾配で計算"
+        },
+        points: includeSample
+          ? [
+              { section_length_m: 0, height_mm: 1000 },
+              { section_length_m: 2, height_mm: 1000 },
+              { section_length_m: 2, height_mm: 1000 },
+              { section_length_m: 2, height_mm: 1000 },
+              { section_length_m: 2, height_mm: 1000 }
+            ]
+          : [],
         updated_at: new Date().toISOString()
-      };
-    }
-
-    function storedNumber(value, fallback) {
-      if (value === undefined) return fallback;
-      if (value === null || value === "") return null;
-
-      const number = Number(value);
-      return Number.isFinite(number) ? number : fallback;
-    }
-
-    function numberOrNull(value) {
-      if (value === "" || value === null || value === undefined) {
-        return null;
-      }
-
-      const number = Number(value);
-      return Number.isFinite(number) ? number : null;
-    }
-
-    function normalizeState(source = {}) {
-      const points = Array.isArray(source.points)
-        ? source.points
-            .map((point) => ({
-              distance_m: numberOrNull(point.distance_m),
-              height_mm: numberOrNull(point.height_mm)
-            }))
-            .filter((point) =>
-              point.distance_m !== null &&
-              point.height_mm !== null
-            )
-        : [];
-
-      return {
-        schema_version: "2.0",
-        method:
-          source.method === "上下幅平均"
-            ? "上下幅平均"
-            : "勾配で計算",
-        top_width_m: storedNumber(source.top_width_m, 2),
-        bottom_width_m: storedNumber(source.bottom_width_m, 2),
-        front_slope: storedNumber(source.front_slope, 0.5),
-        rear_slope: storedNumber(source.rear_slope, 0),
-        points,
-        updated_at:
-          source.updated_at || new Date().toISOString()
       };
     }
 
@@ -791,148 +637,176 @@
         const saved = localStorage.getItem(STORAGE_KEY);
 
         if (!saved) {
-          return blankState();
+          return createInitialState(true);
         }
 
-        return normalizeState(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+
+        if (
+          !parsed ||
+          !parsed.conditions ||
+          !Array.isArray(parsed.points)
+        ) {
+          return createInitialState(true);
+        }
+
+        return {
+          version: APP_VERSION,
+          conditions: {
+            top_width_m: numberOrNull(parsed.conditions.top_width_m),
+            bottom_width_m: numberOrNull(parsed.conditions.bottom_width_m),
+            front_slope_n: numberOrNull(parsed.conditions.front_slope_n),
+            rear_slope_n: numberOrNull(parsed.conditions.rear_slope_n),
+            calc_method:
+              parsed.conditions.calc_method === "上下幅平均"
+                ? "上下幅平均"
+                : "勾配で計算"
+          },
+          points: parsed.points.map(point => ({
+            section_length_m: numberOrNull(point.section_length_m),
+            height_mm: numberOrNull(point.height_mm)
+          })),
+          updated_at: parsed.updated_at || new Date().toISOString()
+        };
       } catch (error) {
-        return blankState();
+        console.error(error);
+        return createInitialState(true);
       }
+    }
+
+    let state = loadState();
+    let editingIndex = null;
+    let toastTimer = null;
+
+    function numberOrNull(value) {
+      if (value === null || value === undefined || value === "") {
+        return null;
+      }
+
+      const number = Number(value);
+      return Number.isFinite(number) ? number : null;
+    }
+
+    function fixed(value, digits = 3) {
+      return Number.isFinite(value) ? value.toFixed(digits) : "－";
     }
 
     function saveState() {
       state.updated_at = new Date().toISOString();
-
-      try {
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify(state)
-        );
-      } catch (error) {
-        console.log("端末内保存に失敗しました。");
-      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
-    function formatNumber(value, decimals = 3) {
-      if (!Number.isFinite(value)) return "-";
-      return value.toFixed(decimals);
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      elements.toast.textContent = message;
+      elements.toast.classList.add("show");
+
+      toastTimer = setTimeout(() => {
+        elements.toast.classList.remove("show");
+      }, 1800);
     }
 
-    function showMessage(text, type = "info") {
-      const message = document.getElementById("message");
+    function setBasicInputs() {
+      const conditions = state.conditions;
 
-      message.textContent = text;
-      message.className = `message show ${type}`;
-
-      window.clearTimeout(showMessage.timer);
-
-      showMessage.timer = window.setTimeout(() => {
-        message.className = "message";
-      }, 4000);
-    }
-
-    function showTab(tabId) {
-      document.querySelectorAll(".screen").forEach((screen) => {
-        screen.classList.toggle(
-          "active",
-          screen.id === tabId
-        );
-      });
-
-      document.querySelectorAll(".tab-button").forEach((button) => {
-        button.classList.toggle(
-          "active",
-          button.dataset.tab === tabId
-        );
-      });
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-      if (tabId === "points") {
-        window.setTimeout(() => {
-          document.getElementById("pointDistance").focus();
-        }, 200);
-      }
-    }
-
-    function updateMethodFields() {
-      const method = document.getElementById("method").value;
-
-      document
-        .getElementById("averageFields")
-        .classList.toggle(
-          "hidden",
-          method !== "上下幅平均"
-        );
-
-      document
-        .getElementById("slopeFields")
-        .classList.toggle(
-          "hidden",
-          method === "上下幅平均"
-        );
-    }
-
-    function fillFormFromState() {
-      document.getElementById("method").value =
-        state.method;
-
-      document.getElementById("topWidth").value =
-        state.top_width_m ?? "";
-
-      document.getElementById("bottomWidth").value =
-        state.bottom_width_m ?? "";
-
-      document.getElementById("frontSlope").value =
-        state.front_slope ?? "";
-
-      document.getElementById("rearSlope").value =
-        state.rear_slope ?? "";
+      elements.topWidth.value = conditions.top_width_m ?? "";
+      elements.bottomWidth.value = conditions.bottom_width_m ?? "";
+      elements.frontSlope.value = conditions.front_slope_n ?? "";
+      elements.rearSlope.value = conditions.rear_slope_n ?? "";
+      elements.calculationMethod.value = conditions.calc_method;
 
       updateMethodFields();
     }
 
-    function updateStateFromForm() {
-      state.method =
-        document.getElementById("method").value;
+    function updateMethodFields() {
+      const averageMode =
+        elements.calculationMethod.value === "上下幅平均";
 
-      state.top_width_m = numberOrNull(
-        document.getElementById("topWidth").value
-      );
-
-      state.bottom_width_m = numberOrNull(
-        document.getElementById("bottomWidth").value
-      );
-
-      state.front_slope = numberOrNull(
-        document.getElementById("frontSlope").value
-      );
-
-      state.rear_slope = numberOrNull(
-        document.getElementById("rearSlope").value
-      );
-
-      saveState();
+      elements.bottomWidth.disabled = !averageMode;
+      elements.frontSlope.disabled = averageMode;
+      elements.rearSlope.disabled = averageMode;
     }
 
-    function validateBasicConditions() {
-      if (state.top_width_m === null) {
+    function syncConditions() {
+      state.conditions.top_width_m =
+        numberOrNull(elements.topWidth.value);
+
+      state.conditions.bottom_width_m =
+        numberOrNull(elements.bottomWidth.value);
+
+      state.conditions.front_slope_n =
+        numberOrNull(elements.frontSlope.value);
+
+      state.conditions.rear_slope_n =
+        numberOrNull(elements.rearSlope.value);
+
+      state.conditions.calc_method =
+        elements.calculationMethod.value;
+
+      updateMethodFields();
+      saveState();
+      renderOutputs();
+    }
+
+    function validateBasicConditions(conditions) {
+      if (
+        conditions.top_width_m === null ||
+        conditions.top_width_m <= 0
+      ) {
         return "上幅を入力してください";
       }
 
-      if (state.method === "上下幅平均") {
-        if (state.bottom_width_m === null) {
+      if (conditions.calc_method === "上下幅平均") {
+        if (
+          conditions.bottom_width_m === null ||
+          conditions.bottom_width_m <= 0
+        ) {
           return "上幅と下幅を入力してください";
         }
       } else {
         if (
-          state.front_slope === null ||
-          state.rear_slope === null
+          conditions.front_slope_n === null ||
+          conditions.rear_slope_n === null
         ) {
           return "上幅と前後勾配を入力してください";
+        }
+
+        if (
+          conditions.front_slope_n < 0 ||
+          conditions.rear_slope_n < 0
+        ) {
+          return "勾配は0以上で入力してください";
+        }
+      }
+
+      return "";
+    }
+
+    function validatePoints(points) {
+      if (points.length < 2) {
+        return "2測点以上入力してください";
+      }
+
+      for (let index = 0; index < points.length; index += 1) {
+        const point = points[index];
+
+        if (
+          point.section_length_m === null ||
+          point.height_mm === null
+        ) {
+          return "区間長と高さを同じ測点に入力してください";
+        }
+
+        if (point.height_mm < 0) {
+          return "高さは0以上で入力してください";
+        }
+
+        if (index === 0 && point.section_length_m !== 0) {
+          return "1測点目の区間長は0にしてください";
+        }
+
+        if (index > 0 && point.section_length_m <= 0) {
+          return "2測点目以降の区間長は0より大きくしてください";
         }
       }
 
@@ -940,508 +814,343 @@
     }
 
     function calculate() {
-      const basicError = validateBasicConditions();
-
-      if (basicError) {
-        return {
-          error: basicError,
-          total: 0,
-          rows: []
-        };
-      }
+      const conditions = state.conditions;
+      const basicError = validateBasicConditions(conditions);
+      const pointError = validatePoints(state.points);
 
       const rows = [];
+      let previousArea = null;
       let total = 0;
 
       state.points.forEach((point, index) => {
-        const heightM = point.height_mm / 1000;
+        const heightM =
+          point.height_mm === null ? null : point.height_mm / 1000;
 
-        let calculatedWidth;
+        let calculationWidth = null;
+        let area = null;
+        let section = index === 0 ? 0 : null;
 
-        if (state.method === "上下幅平均") {
-          calculatedWidth =
-            (state.top_width_m + state.bottom_width_m) / 2;
-        } else {
-          calculatedWidth =
-            state.top_width_m +
-            (
-              state.front_slope +
-              state.rear_slope
-            ) *
-            heightM;
+        if (!basicError && heightM !== null && heightM >= 0) {
+          if (conditions.calc_method === "上下幅平均") {
+            calculationWidth =
+              (conditions.top_width_m + conditions.bottom_width_m) / 2;
+
+            area = calculationWidth * heightM;
+          } else {
+            calculationWidth =
+              conditions.top_width_m +
+              (conditions.front_slope_n + conditions.rear_slope_n) *
+                heightM;
+
+            area =
+              ((conditions.top_width_m + calculationWidth) / 2) *
+              heightM;
+          }
         }
 
-        let area;
-
-        if (state.method === "上下幅平均") {
-          area = calculatedWidth * heightM;
-        } else {
-          area =
-            (
-              (
-                state.top_width_m +
-                calculatedWidth
-              ) /
-              2
-            ) *
-            heightM;
-        }
-
-        let section = 0;
-
-        if (index > 0) {
-          const previousRow = rows[index - 1];
-          const previousPoint = state.points[index - 1];
-
+        if (
+          index > 0 &&
+          previousArea !== null &&
+          area !== null &&
+          point.section_length_m !== null &&
+          point.section_length_m > 0
+        ) {
           section =
-            (
-              (
-                previousRow.area_m2 +
-                area
-              ) /
-              2
-            ) *
-            (
-              point.distance_m -
-              previousPoint.distance_m
-            );
-        }
+            ((previousArea + area) / 2) *
+            point.section_length_m;
 
-        total += section;
+          total += section;
+        }
 
         rows.push({
-          distance_m: point.distance_m,
+          point_no: index + 1,
+          section_length_m: point.section_length_m,
           height_mm: point.height_mm,
-          calc_width_m: calculatedWidth,
+          calc_width_m: calculationWidth,
           area_m2: area,
           section_m3: section
         });
+
+        previousArea = area;
       });
 
-      let error = "";
-
-      if (state.points.length === 0) {
-        error = "測点を追加してください";
-      } else if (state.points.length < 2) {
-        error = "2測点以上入力してください";
-      }
-
       return {
-        error,
+        rows,
         total,
-        rows
+        error: basicError || pointError
       };
     }
 
-    function renderCalculation(calculation) {
-      const totalText =
-        `${formatNumber(calculation.total)} m³`;
+    function renderResult(calculation) {
+      const basicError = validateBasicConditions(state.conditions);
 
-      document.getElementById("headerTotal").textContent =
-        totalText;
+      elements.totalValue.textContent =
+        basicError ? "－" : fixed(calculation.total, 3);
 
-      document.getElementById("resultTotal").textContent =
-        totalText;
-
-      document.getElementById("pointCount").textContent =
-        state.points.length;
-
-      const status =
-        document.getElementById("calculationStatus");
-
-      if (state.points.length === 0) {
-        status.textContent = "未入力";
-        status.style.color = "#64748b";
-      } else if (calculation.error) {
-        status.textContent = "入力確認";
-        status.style.color = "#c62828";
+      if (calculation.error) {
+        elements.resultStatus.textContent = calculation.error;
+        elements.resultStatus.className =
+          "result-status warning";
       } else {
-        status.textContent = "計算完了";
-        status.style.color = "#2e7d32";
+        elements.resultStatus.textContent = "計算完了";
+        elements.resultStatus.className = "result-status ok";
       }
     }
 
     function renderPoints(calculation) {
-      const pointList =
-        document.getElementById("pointList");
+      elements.pointCount.textContent =
+        `${state.points.length}測点`;
 
       if (state.points.length === 0) {
-        pointList.innerHTML =
-          '<div class="empty">' +
-          '測点はまだ入力されていません。' +
-          '</div>';
-
+        elements.pointList.innerHTML = `
+          <div class="empty">
+            測点がありません。<br>
+            1測点目は区間長「0」で追加してください。
+          </div>
+        `;
         return;
       }
 
-      pointList.innerHTML = state.points
-        .map((point, index) => {
-          const row = calculation.rows[index];
+      elements.pointList.innerHTML = calculation.rows
+        .map(row => `
+          <article class="point-card">
+            <div class="point-head">
+              <div class="point-number">測点 No.${row.point_no}</div>
+              <div>
+                区間 ${row.point_no === 1
+                  ? "－"
+                  : fixed(row.section_m3, 3) + " m³"}
+              </div>
+            </div>
 
-          const calculatedWidth = row
-            ? formatNumber(row.calc_width_m)
-            : "-";
-
-          const area = row
-            ? formatNumber(row.area_m2)
-            : "-";
-
-          const section = row
-            ? formatNumber(row.section_m3)
-            : "-";
-
-          return `
-            <article class="point-card">
-              <div class="point-card-header">
-                <span class="point-number">
-                  No.${index + 1}
-                </span>
-
-                <strong>${section} m³</strong>
+            <div class="point-data">
+              <div class="point-value">
+                <small>区間長</small>
+                <strong>${fixed(row.section_length_m, 3)} m</strong>
               </div>
 
-              <div class="point-values">
-                <div class="point-value">
-                  <small>距離</small>
-                  <strong>
-                    ${formatNumber(point.distance_m)} m
-                  </strong>
-                </div>
-
-                <div class="point-value">
-                  <small>高さ</small>
-                  <strong>
-                    ${formatNumber(point.height_mm, 0)} mm
-                  </strong>
-                </div>
+              <div class="point-value">
+                <small>高さ</small>
+                <strong>${fixed(row.height_mm, 0)} mm</strong>
               </div>
 
-              <div class="calculated-values">
-                <div>
-                  計算幅<br>
-                  <strong>${calculatedWidth}</strong>
-                </div>
-
-                <div>
-                  断面積<br>
-                  <strong>${area}</strong>
-                </div>
-
-                <div>
-                  区間<br>
-                  <strong>${section}</strong>
-                </div>
+              <div class="point-value">
+                <small>計算幅</small>
+                <strong>${fixed(row.calc_width_m, 3)} m</strong>
               </div>
 
-              <div class="point-actions">
-                <button
-                  class="button-secondary"
-                  data-edit-point="${index}"
-                >
-                  修正
-                </button>
-
-                <button
-                  class="button-danger"
-                  data-delete-point="${index}"
-                >
-                  削除
-                </button>
+              <div class="point-value">
+                <small>断面積</small>
+                <strong>${fixed(row.area_m2, 3)} m²</strong>
               </div>
-            </article>
-          `;
-        })
+            </div>
+
+            <div class="point-actions">
+              <button
+                class="small-button edit-button"
+                type="button"
+                data-action="edit"
+                data-index="${row.point_no - 1}"
+              >
+                修正
+              </button>
+
+              <button
+                class="small-button delete-button"
+                type="button"
+                data-action="delete"
+                data-index="${row.point_no - 1}"
+              >
+                削除
+              </button>
+            </div>
+          </article>
+        `)
         .join("");
-
-      pointList
-        .querySelectorAll("[data-edit-point]")
-        .forEach((button) => {
-          button.addEventListener("click", () => {
-            startPointEdit(
-              Number(button.dataset.editPoint)
-            );
-          });
-        });
-
-      pointList
-        .querySelectorAll("[data-delete-point]")
-        .forEach((button) => {
-          button.addEventListener("click", () => {
-            deletePoint(
-              Number(button.dataset.deletePoint)
-            );
-          });
-        });
     }
 
-    function renderAll() {
+    function renderOutputs() {
       const calculation = calculate();
-
-      renderCalculation(calculation);
+      renderResult(calculation);
       renderPoints(calculation);
     }
 
-    function validatePoint(
-      distance,
-      height,
-      replaceIndex = null
-    ) {
-      if (distance === null || height === null) {
-        return "距離と高さを同じ測点に入力してください";
+    function resetPointForm() {
+      editingIndex = null;
+      elements.sectionLength.value =
+        state.points.length === 0 ? "0" : "";
+      elements.heightMm.value = "";
+      elements.pointError.textContent = "";
+      elements.pointSubmitButton.textContent = "測点を追加";
+      elements.cancelEditButton.classList.add("hidden");
+    }
+
+    function validatePointInput(sectionLength, heightMm) {
+      const pointIndex =
+        editingIndex === null
+          ? state.points.length
+          : editingIndex;
+
+      if (sectionLength === null || heightMm === null) {
+        return "区間長と高さを入力してください";
       }
 
-      if (distance < 0) {
-        return "距離は0以上で入力してください";
-      }
-
-      if (height < 0) {
+      if (heightMm < 0) {
         return "高さは0以上で入力してください";
       }
 
-      const testPoints = state.points.map((point) => ({
-        ...point
-      }));
-
-      const newPoint = {
-        distance_m: distance,
-        height_mm: height
-      };
-
-      if (replaceIndex === null) {
-        testPoints.push(newPoint);
-      } else {
-        testPoints[replaceIndex] = newPoint;
+      if (pointIndex === 0 && sectionLength !== 0) {
+        return "1測点目の区間長は0にしてください";
       }
 
-      for (let index = 1; index < testPoints.length; index++) {
-        if (
-          testPoints[index].distance_m <=
-          testPoints[index - 1].distance_m
-        ) {
-          return "距離は前の測点より大きくしてください";
-        }
+      if (pointIndex > 0 && sectionLength <= 0) {
+        return "2測点目以降の区間長は0より大きくしてください";
       }
 
       return "";
     }
 
-    function resetPointEditor(clearHeight = false) {
-      editingPointIndex = null;
+    function editPoint(index) {
+      const point = state.points[index];
 
-      document.getElementById("pointEntryTitle").textContent =
-        "測点を追加";
-
-      document.getElementById("addPointButton").textContent =
-        "測点を追加";
-
-      document
-        .getElementById("cancelEditButton")
-        .classList.add("hidden");
-
-      document.getElementById("pointDistance").value = "";
-
-      if (clearHeight) {
-        document.getElementById("pointHeight").value = "";
-      }
-    }
-
-    function addOrUpdatePoint() {
-      updateStateFromForm();
-
-      const distanceInput =
-        document.getElementById("pointDistance");
-
-      const heightInput =
-        document.getElementById("pointHeight");
-
-      const distance =
-        numberOrNull(distanceInput.value);
-
-      const height =
-        numberOrNull(heightInput.value);
-
-      const error = validatePoint(
-        distance,
-        height,
-        editingPointIndex
-      );
-
-      if (error) {
-        showMessage(error, "error");
+      if (!point) {
         return;
       }
 
-      const point = {
-        distance_m: distance,
-        height_mm: height
-      };
+      editingIndex = index;
+      elements.sectionLength.value =
+        point.section_length_m ?? "";
+      elements.heightMm.value = point.height_mm ?? "";
+      elements.pointSubmitButton.textContent = "測点を更新";
+      elements.cancelEditButton.classList.remove("hidden");
+      elements.pointError.textContent = "";
 
-      if (editingPointIndex === null) {
-        state.points.push(point);
-        showMessage("測点を追加しました", "success");
-      } else {
-        state.points[editingPointIndex] = point;
-        showMessage("測点を修正しました", "success");
-      }
+      elements.sectionLength.focus();
 
-      saveState();
-      resetPointEditor(false);
-
-      heightInput.value = height;
-      distanceInput.focus();
-
-      renderAll();
-    }
-
-    function startPointEdit(index) {
-      const point = state.points[index];
-
-      editingPointIndex = index;
-
-      document.getElementById("pointDistance").value =
-        point.distance_m;
-
-      document.getElementById("pointHeight").value =
-        point.height_mm;
-
-      document.getElementById("pointEntryTitle").textContent =
-        `測点No.${index + 1}を修正`;
-
-      document.getElementById("addPointButton").textContent =
-        "修正内容を保存";
-
-      document
-        .getElementById("cancelEditButton")
-        .classList.remove("hidden");
-
-      document.getElementById("pointDistance").focus();
+      window.scrollTo({
+        top:
+          elements.pointForm.getBoundingClientRect().top +
+          window.scrollY -
+          100,
+        behavior: "smooth"
+      });
     }
 
     function deletePoint(index) {
-      if (
-        !confirm(
-          `測点No.${index + 1}を削除してよろしいですか？`
-        )
-      ) {
+      if (!state.points[index]) {
+        return;
+      }
+
+      if (!confirm(`測点 No.${index + 1}を削除しますか？`)) {
         return;
       }
 
       state.points.splice(index, 1);
 
-      resetPointEditor(true);
-      saveState();
-      renderAll();
+      if (state.points.length > 0) {
+        state.points[0].section_length_m = 0;
+      }
 
-      showMessage("測点を削除しました", "success");
+      saveState();
+      resetPointForm();
+      renderOutputs();
+      showToast("測点を削除しました");
     }
 
-    function loadSample() {
-      if (
-        state.points.length > 0 &&
-        !confirm(
-          "現在の測点をサンプルデータに置き換えますか？"
-        )
-      ) {
+    elements.pointForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const sectionLength =
+        numberOrNull(elements.sectionLength.value);
+
+      const heightMm =
+        numberOrNull(elements.heightMm.value);
+
+      const error =
+        validatePointInput(sectionLength, heightMm);
+
+      if (error) {
+        elements.pointError.textContent = error;
         return;
       }
 
-      state = {
-        ...blankState(),
-        method: "勾配で計算",
-        top_width_m: 2,
-        bottom_width_m: 2,
-        front_slope: 0.5,
-        rear_slope: 0,
-        points: [
-          { distance_m: 0, height_mm: 1000 },
-          { distance_m: 2, height_mm: 1000 },
-          { distance_m: 4, height_mm: 1000 },
-          { distance_m: 6, height_mm: 1000 },
-          { distance_m: 8, height_mm: 1000 }
-        ]
+      const point = {
+        section_length_m: sectionLength,
+        height_mm: heightMm
       };
 
-      fillFormFromState();
-      resetPointEditor(true);
+      if (editingIndex === null) {
+        state.points.push(point);
+        showToast("測点を追加しました");
+      } else {
+        state.points[editingIndex] = point;
+        showToast("測点を更新しました");
+      }
+
       saveState();
-      renderAll();
+      resetPointForm();
+      renderOutputs();
+    });
 
-      showMessage(
-        "確認用サンプルを読み込みました",
-        "success"
-      );
-    }
+    elements.cancelEditButton.addEventListener("click", () => {
+      resetPointForm();
+    });
 
-    function newCalculation() {
-      if (
-        state.points.length > 0 &&
-        !confirm(
-          "現在の入力内容を消去して、新規計算を始めますか？"
-        )
-      ) {
+    elements.pointList.addEventListener("click", event => {
+      const button = event.target.closest("[data-action]");
+
+      if (!button) {
         return;
       }
 
-      state = blankState();
+      const index = Number(button.dataset.index);
 
-      fillFormFromState();
-      resetPointEditor(true);
-      saveState();
-      renderAll();
-      showTab("conditions");
-
-      showMessage("新規計算を開始しました", "success");
-    }
-
-    function csvEscape(value) {
-      const text = String(value ?? "");
-
-      if (
-        text.includes(",") ||
-        text.includes('"') ||
-        text.includes("\n")
-      ) {
-        return `"${text.replace(/"/g, '""')}"`;
+      if (button.dataset.action === "edit") {
+        editPoint(index);
       }
 
-      return text;
+      if (button.dataset.action === "delete") {
+        deletePoint(index);
+      }
+    });
+
+    [
+      elements.topWidth,
+      elements.bottomWidth,
+      elements.frontSlope,
+      elements.rearSlope
+    ].forEach(input => {
+      input.addEventListener("input", syncConditions);
+    });
+
+    elements.calculationMethod.addEventListener(
+      "change",
+      syncConditions
+    );
+
+    function csvEscape(value) {
+      const text =
+        value === null || value === undefined ? "" : String(value);
+
+      return `"${text.replace(/"/g, '""')}"`;
     }
 
-    function fileTimestamp() {
-      const now = new Date();
-
-      const date =
-        now.getFullYear() +
-        String(now.getMonth() + 1).padStart(2, "0") +
-        String(now.getDate()).padStart(2, "0");
-
-      const time =
-        String(now.getHours()).padStart(2, "0") +
-        String(now.getMinutes()).padStart(2, "0") +
-        String(now.getSeconds()).padStart(2, "0");
-
-      return `${date}_${time}`;
-    }
-
-    function exportCsv() {
-      updateStateFromForm();
-
+    function createCsv() {
       const calculation = calculate();
 
       if (calculation.error) {
-        showMessage(calculation.error, "error");
-        return;
+        throw new Error(calculation.error);
       }
 
       const headers = [
-        "schema_version",
-        "method",
+        "app_version",
+        "calc_method",
         "top_width_m",
         "bottom_width_m",
-        "front_slope",
-        "rear_slope",
+        "front_slope_n",
+        "rear_slope_n",
         "point_no",
-        "distance_m",
+        "section_length_m",
         "height_mm",
         "calc_width_m",
         "area_m2",
@@ -1450,342 +1159,277 @@
         "updated_at"
       ];
 
-      const updatedAt = new Date().toISOString();
-
-      const rows = calculation.rows.map((row, index) => [
-        state.schema_version,
-        state.method,
-        state.top_width_m,
-        state.bottom_width_m ?? "",
-        state.front_slope ?? "",
-        state.rear_slope ?? "",
-        index + 1,
-        row.distance_m,
+      const rows = calculation.rows.map(row => [
+        APP_VERSION,
+        state.conditions.calc_method,
+        state.conditions.top_width_m,
+        state.conditions.bottom_width_m,
+        state.conditions.front_slope_n,
+        state.conditions.rear_slope_n,
+        row.point_no,
+        row.section_length_m,
         row.height_mm,
         row.calc_width_m,
         row.area_m2,
         row.section_m3,
         calculation.total,
-        updatedAt
+        state.updated_at
       ]);
 
-      const csv = [
+      return [
         headers.map(csvEscape).join(","),
-        ...rows.map((row) =>
-          row.map(csvEscape).join(",")
-        )
+        ...rows.map(row => row.map(csvEscape).join(","))
       ].join("\r\n");
+    }
 
-      const blob = new Blob(
-        ["\ufeff" + csv],
-        {
-          type: "text/csv;charset=utf-8"
+    async function exportCsv() {
+      try {
+        const csv = createCsv();
+        const date = new Date();
+        const dateText =
+          `${date.getFullYear()}` +
+          `${String(date.getMonth() + 1).padStart(2, "0")}` +
+          `${String(date.getDate()).padStart(2, "0")}`;
+
+        const fileName = `VolumeCo_${dateText}.csv`;
+        const blob = new Blob(
+          ["\uFEFF" + csv],
+          { type: "text/csv;charset=utf-8" }
+        );
+
+        const file = new File(
+          [blob],
+          fileName,
+          { type: "text/csv;charset=utf-8" }
+        );
+
+        if (
+          navigator.share &&
+          navigator.canShare &&
+          navigator.canShare({ files: [file] })
+        ) {
+          await navigator.share({
+            files: [file],
+            title: "VolumeCo計算結果"
+          });
+
+          showToast("CSVを共有しました");
+          return;
         }
-      );
 
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
 
-      link.href = url;
-      link.download =
-        `VolumeCo_${fileTimestamp()}.csv`;
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
 
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      URL.revokeObjectURL(url);
-
-      showMessage("CSVを出力しました", "success");
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast("CSVを出力しました");
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          alert(error.message || "CSVを出力できませんでした");
+        }
+      }
     }
 
     function parseCsv(text) {
       const rows = [];
       let row = [];
       let field = "";
-      let quoted = false;
+      let inQuotes = false;
 
-      const source = text.replace(/^\ufeff/, "");
+      const source = text.replace(/^\uFEFF/, "");
 
-      for (
-        let index = 0;
-        index < source.length;
-        index++
-      ) {
+      for (let index = 0; index < source.length; index += 1) {
         const character = source[index];
 
-        if (quoted) {
-          if (
-            character === '"' &&
-            source[index + 1] === '"'
-          ) {
-            field += '"';
-            index++;
-          } else if (character === '"') {
-            quoted = false;
+        if (inQuotes) {
+          if (character === '"') {
+            if (source[index + 1] === '"') {
+              field += '"';
+              index += 1;
+            } else {
+              inQuotes = false;
+            }
           } else {
             field += character;
           }
         } else if (character === '"') {
-          quoted = true;
+          inQuotes = true;
         } else if (character === ",") {
           row.push(field);
           field = "";
         } else if (character === "\n") {
-          row.push(field.replace(/\r$/, ""));
+          row.push(field);
           rows.push(row);
           row = [];
           field = "";
-        } else {
+        } else if (character !== "\r") {
           field += character;
         }
       }
 
-      row.push(field.replace(/\r$/, ""));
+      row.push(field);
 
-      if (row.some((value) => value !== "")) {
+      if (row.some(value => value !== "")) {
         rows.push(row);
       }
 
-      return rows;
+      return rows.filter(csvRow =>
+        csvRow.some(value => value.trim() !== "")
+      );
     }
 
     async function importCsv(file) {
-      try {
-        const text = await file.text();
-        const rows = parseCsv(text);
+      const text = await file.text();
+      const csvRows = parseCsv(text);
 
-        if (rows.length < 2) {
-          throw new Error("CSVデータがありません");
+      if (csvRows.length < 2) {
+        throw new Error("CSVにデータがありません");
+      }
+
+      const headers = csvRows[0].map(header => header.trim());
+      const requiredHeaders = [
+        "calc_method",
+        "top_width_m",
+        "bottom_width_m",
+        "front_slope_n",
+        "rear_slope_n",
+        "point_no",
+        "section_length_m",
+        "height_mm"
+      ];
+
+      for (const header of requiredHeaders) {
+        if (!headers.includes(header)) {
+          throw new Error(`CSV項目「${header}」がありません`);
         }
+      }
 
-        const headers = rows[0];
-        const dataRows = rows
-          .slice(1)
-          .filter((row) => row.length > 1);
+      const records = csvRows.slice(1).map(csvRow => {
+        const record = {};
 
-        const column = (name) =>
-          headers.indexOf(name);
-
-        const required = [
-          "method",
-          "top_width_m",
-          "distance_m",
-          "height_mm"
-        ];
-
-        if (
-          required.some((name) => column(name) < 0)
-        ) {
-          throw new Error(
-            "対応していないCSV形式です"
-          );
-        }
-
-        const value = (row, name) =>
-          row[column(name)] ?? "";
-
-        const firstRow = dataRows[0];
-
-        const importedPoints = dataRows
-          .map((row, index) => ({
-            point_no:
-              numberOrNull(value(row, "point_no")) ??
-              index + 1,
-            distance_m:
-              numberOrNull(value(row, "distance_m")),
-            height_mm:
-              numberOrNull(value(row, "height_mm"))
-          }))
-          .filter((point) =>
-            point.distance_m !== null &&
-            point.height_mm !== null
-          )
-          .sort((a, b) => a.point_no - b.point_no)
-          .map((point) => ({
-            distance_m: point.distance_m,
-            height_mm: point.height_mm
-          }));
-
-        for (
-          let index = 1;
-          index < importedPoints.length;
-          index++
-        ) {
-          if (
-            importedPoints[index].distance_m <=
-            importedPoints[index - 1].distance_m
-          ) {
-            throw new Error(
-              "CSVの距離が昇順になっていません"
-            );
-          }
-        }
-
-        state = normalizeState({
-          method: value(firstRow, "method"),
-          top_width_m:
-            numberOrNull(
-              value(firstRow, "top_width_m")
-            ),
-          bottom_width_m:
-            numberOrNull(
-              value(firstRow, "bottom_width_m")
-            ),
-          front_slope:
-            numberOrNull(
-              value(firstRow, "front_slope")
-            ),
-          rear_slope:
-            numberOrNull(
-              value(firstRow, "rear_slope")
-            ),
-          points: importedPoints
+        headers.forEach((header, index) => {
+          record[header] = csvRow[index] ?? "";
         });
 
-        fillFormFromState();
-        resetPointEditor(true);
-        saveState();
-        renderAll();
-        showTab("results");
+        return record;
+      });
 
-        showMessage(
-          "CSVからデータを読み込みました",
-          "success"
-        );
-      } catch (error) {
-        showMessage(
-          error.message ||
-            "CSVを読み込めませんでした",
-          "error"
-        );
-      } finally {
-        document.getElementById(
-          "csvFileInput"
-        ).value = "";
+      const first = records[0];
+
+      const importedState = {
+        version: APP_VERSION,
+        conditions: {
+          calc_method:
+            first.calc_method === "上下幅平均"
+              ? "上下幅平均"
+              : "勾配で計算",
+          top_width_m: numberOrNull(first.top_width_m),
+          bottom_width_m: numberOrNull(first.bottom_width_m),
+          front_slope_n: numberOrNull(first.front_slope_n),
+          rear_slope_n: numberOrNull(first.rear_slope_n)
+        },
+        points: records
+          .map(record => ({
+            point_no: Number(record.point_no),
+            section_length_m:
+              numberOrNull(record.section_length_m),
+            height_mm: numberOrNull(record.height_mm)
+          }))
+          .sort((a, b) => a.point_no - b.point_no)
+          .map(record => ({
+            section_length_m: record.section_length_m,
+            height_mm: record.height_mm
+          })),
+        updated_at: new Date().toISOString()
+      };
+
+      const basicError =
+        validateBasicConditions(importedState.conditions);
+
+      if (basicError) {
+        throw new Error(basicError);
       }
+
+      const pointError = validatePoints(importedState.points);
+
+      if (pointError) {
+        throw new Error(pointError);
+      }
+
+      state = importedState;
+      saveState();
+      setBasicInputs();
+      resetPointForm();
+      renderOutputs();
+      showToast("CSVを読み込みました");
     }
 
-    document
-      .querySelectorAll(".tab-button")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
-          showTab(button.dataset.tab);
-        });
-      });
+    elements.csvExportButton.addEventListener(
+      "click",
+      exportCsv
+    );
 
-    [
-      "method",
-      "topWidth",
-      "bottomWidth",
-      "frontSlope",
-      "rearSlope"
-    ].forEach((id) => {
-      const element = document.getElementById(id);
-
-      element.addEventListener("input", () => {
-        updateStateFromForm();
-        updateMethodFields();
-        renderAll();
-      });
-
-      element.addEventListener("change", () => {
-        updateStateFromForm();
-        updateMethodFields();
-        renderAll();
-      });
+    elements.csvImportButton.addEventListener("click", () => {
+      elements.csvFileInput.click();
     });
 
-    document
-      .getElementById("toPointsButton")
-      .addEventListener("click", () => {
-        updateStateFromForm();
+    elements.csvFileInput.addEventListener(
+      "change",
+      async event => {
+        const file = event.target.files[0];
 
-        const error = validateBasicConditions();
-
-        if (error) {
-          showMessage(error, "error");
+        if (!file) {
           return;
         }
 
-        showTab("points");
-      });
-
-    document
-      .getElementById("toResultsButton")
-      .addEventListener("click", () => {
-        updateStateFromForm();
-        renderAll();
-        showTab("results");
-      });
-
-    document
-      .getElementById("addPointButton")
-      .addEventListener(
-        "click",
-        addOrUpdatePoint
-      );
-
-    document
-      .getElementById("cancelEditButton")
-      .addEventListener("click", () => {
-        resetPointEditor(true);
-      });
-
-    document
-      .getElementById("sampleButton")
-      .addEventListener(
-        "click",
-        loadSample
-      );
-
-    document
-      .getElementById("exportCsvButton")
-      .addEventListener(
-        "click",
-        exportCsv
-      );
-
-    document
-      .getElementById("importCsvButton")
-      .addEventListener("click", () => {
-        document.getElementById(
-          "csvFileInput"
-        ).click();
-      });
-
-    document
-      .getElementById("csvFileInput")
-      .addEventListener("change", (event) => {
-        const file = event.target.files[0];
-
-        if (file) {
-          importCsv(file);
+        try {
+          await importCsv(file);
+        } catch (error) {
+          alert(error.message || "CSVを読み込めませんでした");
+        } finally {
+          elements.csvFileInput.value = "";
         }
-      });
+      }
+    );
 
-    document
-      .getElementById("newCalculationButton")
-      .addEventListener(
-        "click",
-        newCalculation
-      );
+    elements.newCalculationButton.addEventListener(
+      "click",
+      () => {
+        if (
+          !confirm(
+            "入力中の内容を消去して新しい計算を始めますか？"
+          )
+        ) {
+          return;
+        }
+
+        state = createInitialState(false);
+        saveState();
+        setBasicInputs();
+        resetPointForm();
+        renderOutputs();
+        showToast("新しい計算を開始しました");
+      }
+    );
+
+    setBasicInputs();
+    resetPointForm();
+    renderOutputs();
+    saveState();
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register("./sw.js")
-          .catch((error) => {
-            console.log(
-              "Service Worker登録エラー",
-              error
-            );
-          });
+          .register("./sw.js", { scope: "./" })
+          .then(registration => registration.update())
+          .catch(error => console.error(error));
       });
     }
-
-    fillFormFromState();
-    renderAll();
   </script>
 </body>
 </html>
