@@ -24,7 +24,6 @@
       --text: #1f2933;
       --muted: #64748b;
       --danger: #c00000;
-      --success: #237a3b;
       --white: #ffffff;
     }
 
@@ -36,11 +35,11 @@
     body {
       margin: 0;
       min-height: 100vh;
+      padding-bottom: calc(30px + env(safe-area-inset-bottom));
       background: var(--background);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
         "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-      padding-bottom: calc(30px + env(safe-area-inset-bottom));
     }
 
     button,
@@ -51,18 +50,18 @@
     }
 
     header {
+      padding: calc(16px + env(safe-area-inset-top)) 18px 17px;
       background: var(--navy);
       color: var(--white);
-      padding: calc(16px + env(safe-area-inset-top)) 18px 17px;
     }
 
     .header-inner {
-      max-width: 720px;
-      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      max-width: 720px;
+      margin: 0 auto;
     }
 
     h1 {
@@ -90,24 +89,29 @@
     }
 
     .card {
-      background: var(--white);
+      margin-bottom: 14px;
+      padding: 17px;
       border: 1px solid var(--border);
       border-radius: 15px;
-      padding: 17px;
-      margin-bottom: 14px;
+      background: var(--white);
       box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
     }
 
     h2 {
       margin: 0 0 16px;
-      font-size: 20px;
       color: var(--navy);
+      font-size: 20px;
     }
 
-    .grid {
+    .grid,
+    .sub-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 13px;
+    }
+
+    .sub-grid {
+      grid-column: 1 / -1;
     }
 
     .field {
@@ -121,40 +125,35 @@
     label {
       display: block;
       margin-bottom: 7px;
-      font-weight: 700;
       font-size: 15px;
+      font-weight: 700;
     }
 
     input,
     select {
       width: 100%;
       min-height: 62px;
+      padding: 10px 12px;
       border: 2px solid var(--border);
       border-radius: 11px;
+      outline: none;
       background: var(--white);
       color: var(--text);
-      padding: 10px 12px;
       font-size: 22px;
       text-align: right;
-      outline: none;
     }
 
     select {
-      min-height: 70px;
-      text-align: left;
+      min-height: 76px;
       font-size: 19px;
       font-weight: 700;
+      text-align: left;
     }
 
     input:focus,
     select:focus {
       border-color: var(--blue);
       box-shadow: 0 0 0 3px rgba(0, 112, 192, 0.14);
-    }
-
-    input:disabled {
-      color: #8a96a3;
-      background: #edf0f3;
     }
 
     .unit-wrap {
@@ -167,8 +166,8 @@
 
     .unit {
       position: absolute;
-      right: 13px;
       top: 50%;
+      right: 13px;
       transform: translateY(-50%);
       color: var(--muted);
       font-weight: 700;
@@ -176,6 +175,7 @@
     }
 
     .notice {
+      grid-column: 1 / -1;
       margin: 0 0 15px;
       padding: 12px;
       border-radius: 10px;
@@ -185,11 +185,15 @@
       line-height: 1.6;
     }
 
+    .method-notice {
+      margin: 0;
+    }
+
     .result-card {
+      border: none;
       background: linear-gradient(135deg, #17365d, #24598d);
       color: var(--white);
       text-align: center;
-      border: none;
     }
 
     .result-label {
@@ -228,9 +232,9 @@
     .button {
       width: 100%;
       min-height: 58px;
+      padding: 11px 14px;
       border: 0;
       border-radius: 11px;
-      padding: 11px 14px;
       cursor: pointer;
       font-size: 17px;
       font-weight: 800;
@@ -247,9 +251,9 @@
     }
 
     .button.danger {
+      border: 1px solid #edb5b5;
       background: #fff0f0;
       color: var(--danger);
-      border: 1px solid #edb5b5;
     }
 
     .button:active {
@@ -277,8 +281,8 @@
 
     .section-title {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
       margin-bottom: 13px;
     }
@@ -299,17 +303,18 @@
     }
 
     .point-card {
+      overflow: hidden;
       border: 1px solid var(--border);
       border-radius: 12px;
-      overflow: hidden;
     }
 
     .point-head {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      background: #eef2f6;
+      justify-content: space-between;
+      gap: 10px;
       padding: 10px 12px;
+      background: #eef2f6;
     }
 
     .point-number {
@@ -337,8 +342,8 @@
 
     .point-value strong {
       display: block;
-      font-size: 17px;
       overflow-wrap: anywhere;
+      font-size: 17px;
     }
 
     .point-actions {
@@ -352,8 +357,8 @@
       min-height: 47px;
       border: 0;
       border-radius: 9px;
-      font-weight: 800;
       cursor: pointer;
+      font-weight: 800;
     }
 
     .edit-button {
@@ -369,8 +374,8 @@
     .empty {
       padding: 20px 10px;
       color: var(--muted);
-      text-align: center;
       line-height: 1.6;
+      text-align: center;
     }
 
     .hidden {
@@ -380,9 +385,8 @@
     .toast {
       position: fixed;
       z-index: 100;
-      left: 50%;
       bottom: calc(22px + env(safe-area-inset-bottom));
-      transform: translateX(-50%) translateY(20px);
+      left: 50%;
       max-width: calc(100% - 30px);
       padding: 12px 18px;
       border-radius: 100px;
@@ -391,6 +395,7 @@
       text-align: center;
       opacity: 0;
       pointer-events: none;
+      transform: translateX(-50%) translateY(20px);
       transition: 0.2s;
     }
 
@@ -422,7 +427,7 @@
         <h1>VolumeCo</h1>
         <p class="subtitle">コンクリート残量計算</p>
       </div>
-      <div class="version">Version 0.3</div>
+      <div class="version">Version 0.4</div>
     </div>
   </header>
 
@@ -431,38 +436,6 @@
       <h2>基本条件</h2>
 
       <div class="grid">
-        <div class="field">
-          <label for="topWidth">上幅</label>
-          <div class="unit-wrap">
-            <input id="topWidth" type="number" inputmode="decimal" step="any">
-            <span class="unit">m</span>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="bottomWidth">下幅</label>
-          <div class="unit-wrap">
-            <input id="bottomWidth" type="number" inputmode="decimal" step="any">
-            <span class="unit">m</span>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="frontSlope">前勾配</label>
-          <div class="unit-wrap">
-            <input id="frontSlope" type="number" inputmode="decimal" step="any">
-            <span class="unit">n</span>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="rearSlope">後勾配</label>
-          <div class="unit-wrap">
-            <input id="rearSlope" type="number" inputmode="decimal" step="any">
-            <span class="unit">n</span>
-          </div>
-        </div>
-
         <div class="field full">
           <label for="calculationMethod">計算方式</label>
           <select id="calculationMethod">
@@ -470,6 +443,52 @@
             <option value="上下幅平均">上下幅平均</option>
           </select>
         </div>
+
+        <div id="slopeFields" class="sub-grid">
+          <div class="field full">
+            <label for="slopeTopWidth">上幅</label>
+            <div class="unit-wrap">
+              <input
+                id="slopeTopWidth"
+                type="number"
+                inputmode="decimal"
+                step="any"
+              >
+              <span class="unit">m</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="frontSlope">前勾配</label>
+            <div class="unit-wrap">
+              <input
+                id="frontSlope"
+                type="number"
+                inputmode="decimal"
+                step="any"
+              >
+              <span class="unit">n</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="rearSlope">後勾配</label>
+            <div class="unit-wrap">
+              <input
+                id="rearSlope"
+                type="number"
+                inputmode="decimal"
+                step="any"
+              >
+              <span class="unit">n</span>
+            </div>
+          </div>
+        </div>
+
+        <p id="averageMethodNotice" class="notice method-notice hidden">
+          上下幅平均では、上幅と下幅を測点ごとに入力します。
+          前回入力した幅は次の測点へ自動で引き継がれます。
+        </p>
       </div>
     </section>
 
@@ -488,7 +507,8 @@
       <h2>測点入力</h2>
 
       <p class="notice">
-        区間長は、直前の測点からの長さです。1測点目は「0」、2測点目以降は各区間の長さを入力してください。
+        区間長は直前の測点からの長さです。1測点目は「0」、
+        2測点目以降は各区間の長さを入力してください。
       </p>
 
       <form id="pointForm">
@@ -520,12 +540,41 @@
               <span class="unit">mm</span>
             </div>
           </div>
+
+          <div id="pointWidthFields" class="sub-grid hidden">
+            <div class="field">
+              <label for="pointTopWidth">上幅</label>
+              <div class="unit-wrap">
+                <input
+                  id="pointTopWidth"
+                  type="number"
+                  inputmode="decimal"
+                  step="any"
+                >
+                <span class="unit">m</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="pointBottomWidth">下幅</label>
+              <div class="unit-wrap">
+                <input
+                  id="pointBottomWidth"
+                  type="number"
+                  inputmode="decimal"
+                  step="any"
+                >
+                <span class="unit">m</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="button-row">
           <button id="pointSubmitButton" class="button primary" type="submit">
             測点を追加
           </button>
+
           <button
             id="cancelEditButton"
             class="button secondary hidden"
@@ -579,15 +628,18 @@
   <script>
     "use strict";
 
-    const APP_VERSION = "0.3";
-    const STORAGE_KEY = "volumeco_current_v03";
+    const APP_VERSION = "0.4";
+    const STORAGE_KEY = "volumeco_current_v04";
 
     const elements = {
-      topWidth: document.getElementById("topWidth"),
-      bottomWidth: document.getElementById("bottomWidth"),
+      calculationMethod: document.getElementById("calculationMethod"),
+      slopeFields: document.getElementById("slopeFields"),
+      averageMethodNotice:
+        document.getElementById("averageMethodNotice"),
+
+      slopeTopWidth: document.getElementById("slopeTopWidth"),
       frontSlope: document.getElementById("frontSlope"),
       rearSlope: document.getElementById("rearSlope"),
-      calculationMethod: document.getElementById("calculationMethod"),
 
       totalValue: document.getElementById("totalValue"),
       resultStatus: document.getElementById("resultStatus"),
@@ -595,41 +647,92 @@
       pointForm: document.getElementById("pointForm"),
       sectionLength: document.getElementById("sectionLength"),
       heightMm: document.getElementById("heightMm"),
-      pointSubmitButton: document.getElementById("pointSubmitButton"),
-      cancelEditButton: document.getElementById("cancelEditButton"),
+      pointWidthFields: document.getElementById("pointWidthFields"),
+      pointTopWidth: document.getElementById("pointTopWidth"),
+      pointBottomWidth: document.getElementById("pointBottomWidth"),
+      pointSubmitButton:
+        document.getElementById("pointSubmitButton"),
+      cancelEditButton:
+        document.getElementById("cancelEditButton"),
       pointError: document.getElementById("pointError"),
 
       pointCount: document.getElementById("pointCount"),
       pointList: document.getElementById("pointList"),
 
-      csvExportButton: document.getElementById("csvExportButton"),
-      csvImportButton: document.getElementById("csvImportButton"),
-      newCalculationButton: document.getElementById("newCalculationButton"),
-      csvFileInput: document.getElementById("csvFileInput"),
+      csvExportButton:
+        document.getElementById("csvExportButton"),
+      csvImportButton:
+        document.getElementById("csvImportButton"),
+      newCalculationButton:
+        document.getElementById("newCalculationButton"),
+      csvFileInput:
+        document.getElementById("csvFileInput"),
+
       toast: document.getElementById("toast")
     };
 
     function createInitialState(includeSample = true) {
       return {
         version: APP_VERSION,
+
         conditions: {
-          top_width_m: 2,
-          bottom_width_m: 2,
+          calc_method: "勾配で計算",
+          slope_top_width_m: 2,
           front_slope_n: 0.5,
-          rear_slope_n: 0,
-          calc_method: "勾配で計算"
+          rear_slope_n: 0
         },
+
         points: includeSample
           ? [
-              { section_length_m: 0, height_mm: 1000 },
-              { section_length_m: 2, height_mm: 1000 },
-              { section_length_m: 2, height_mm: 1000 },
-              { section_length_m: 2, height_mm: 1000 },
-              { section_length_m: 2, height_mm: 1000 }
+              {
+                section_length_m: 0,
+                height_mm: 1000,
+                point_top_width_m: 2,
+                point_bottom_width_m: 2
+              },
+              {
+                section_length_m: 2,
+                height_mm: 1000,
+                point_top_width_m: 2,
+                point_bottom_width_m: 2
+              },
+              {
+                section_length_m: 2,
+                height_mm: 1000,
+                point_top_width_m: 2,
+                point_bottom_width_m: 2
+              },
+              {
+                section_length_m: 2,
+                height_mm: 1000,
+                point_top_width_m: 2,
+                point_bottom_width_m: 2
+              },
+              {
+                section_length_m: 2,
+                height_mm: 1000,
+                point_top_width_m: 2,
+                point_bottom_width_m: 2
+              }
             ]
           : [],
+
         updated_at: new Date().toISOString()
       };
+    }
+
+    function numberOrNull(value) {
+      if (
+        value === null ||
+        value === undefined ||
+        value === ""
+      ) {
+        return null;
+      }
+
+      const number = Number(value);
+
+      return Number.isFinite(number) ? number : null;
     }
 
     function loadState() {
@@ -652,21 +755,45 @@
 
         return {
           version: APP_VERSION,
+
           conditions: {
-            top_width_m: numberOrNull(parsed.conditions.top_width_m),
-            bottom_width_m: numberOrNull(parsed.conditions.bottom_width_m),
-            front_slope_n: numberOrNull(parsed.conditions.front_slope_n),
-            rear_slope_n: numberOrNull(parsed.conditions.rear_slope_n),
             calc_method:
               parsed.conditions.calc_method === "上下幅平均"
                 ? "上下幅平均"
-                : "勾配で計算"
+                : "勾配で計算",
+
+            slope_top_width_m:
+              numberOrNull(
+                parsed.conditions.slope_top_width_m
+              ),
+
+            front_slope_n:
+              numberOrNull(
+                parsed.conditions.front_slope_n
+              ),
+
+            rear_slope_n:
+              numberOrNull(
+                parsed.conditions.rear_slope_n
+              )
           },
+
           points: parsed.points.map(point => ({
-            section_length_m: numberOrNull(point.section_length_m),
-            height_mm: numberOrNull(point.height_mm)
+            section_length_m:
+              numberOrNull(point.section_length_m),
+
+            height_mm:
+              numberOrNull(point.height_mm),
+
+            point_top_width_m:
+              numberOrNull(point.point_top_width_m),
+
+            point_bottom_width_m:
+              numberOrNull(point.point_bottom_width_m)
           })),
-          updated_at: parsed.updated_at || new Date().toISOString()
+
+          updated_at:
+            parsed.updated_at || new Date().toISOString()
         };
       } catch (error) {
         console.error(error);
@@ -678,26 +805,28 @@
     let editingIndex = null;
     let toastTimer = null;
 
-    function numberOrNull(value) {
-      if (value === null || value === undefined || value === "") {
-        return null;
-      }
-
-      const number = Number(value);
-      return Number.isFinite(number) ? number : null;
+    function isAverageMethod() {
+      return state.conditions.calc_method === "上下幅平均";
     }
 
     function fixed(value, digits = 3) {
-      return Number.isFinite(value) ? value.toFixed(digits) : "－";
+      return Number.isFinite(value)
+        ? value.toFixed(digits)
+        : "－";
     }
 
     function saveState() {
       state.updated_at = new Date().toISOString();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(state)
+      );
     }
 
     function showToast(message) {
       clearTimeout(toastTimer);
+
       elements.toast.textContent = message;
       elements.toast.classList.add("show");
 
@@ -706,33 +835,89 @@
       }, 1800);
     }
 
+    function getLastPoint() {
+      if (state.points.length === 0) {
+        return null;
+      }
+
+      return state.points[state.points.length - 1];
+    }
+
+    function fillInheritedWidths(force = false) {
+      if (!isAverageMethod()) {
+        return;
+      }
+
+      const lastPoint = getLastPoint();
+
+      if (!lastPoint) {
+        return;
+      }
+
+      if (
+        force ||
+        elements.pointTopWidth.value === ""
+      ) {
+        elements.pointTopWidth.value =
+          lastPoint.point_top_width_m ?? "";
+      }
+
+      if (
+        force ||
+        elements.pointBottomWidth.value === ""
+      ) {
+        elements.pointBottomWidth.value =
+          lastPoint.point_bottom_width_m ?? "";
+      }
+    }
+
+    function updateMethodFields() {
+      const averageMode = isAverageMethod();
+
+      elements.slopeFields.classList.toggle(
+        "hidden",
+        averageMode
+      );
+
+      elements.averageMethodNotice.classList.toggle(
+        "hidden",
+        !averageMode
+      );
+
+      elements.pointWidthFields.classList.toggle(
+        "hidden",
+        !averageMode
+      );
+
+      if (averageMode && editingIndex === null) {
+        fillInheritedWidths(false);
+      }
+    }
+
     function setBasicInputs() {
       const conditions = state.conditions;
 
-      elements.topWidth.value = conditions.top_width_m ?? "";
-      elements.bottomWidth.value = conditions.bottom_width_m ?? "";
-      elements.frontSlope.value = conditions.front_slope_n ?? "";
-      elements.rearSlope.value = conditions.rear_slope_n ?? "";
-      elements.calculationMethod.value = conditions.calc_method;
+      elements.calculationMethod.value =
+        conditions.calc_method;
+
+      elements.slopeTopWidth.value =
+        conditions.slope_top_width_m ?? "";
+
+      elements.frontSlope.value =
+        conditions.front_slope_n ?? "";
+
+      elements.rearSlope.value =
+        conditions.rear_slope_n ?? "";
 
       updateMethodFields();
     }
 
-    function updateMethodFields() {
-      const averageMode =
-        elements.calculationMethod.value === "上下幅平均";
-
-      elements.bottomWidth.disabled = !averageMode;
-      elements.frontSlope.disabled = averageMode;
-      elements.rearSlope.disabled = averageMode;
-    }
-
     function syncConditions() {
-      state.conditions.top_width_m =
-        numberOrNull(elements.topWidth.value);
+      state.conditions.calc_method =
+        elements.calculationMethod.value;
 
-      state.conditions.bottom_width_m =
-        numberOrNull(elements.bottomWidth.value);
+      state.conditions.slope_top_width_m =
+        numberOrNull(elements.slopeTopWidth.value);
 
       state.conditions.front_slope_n =
         numberOrNull(elements.frontSlope.value);
@@ -740,54 +925,54 @@
       state.conditions.rear_slope_n =
         numberOrNull(elements.rearSlope.value);
 
-      state.conditions.calc_method =
-        elements.calculationMethod.value;
-
       updateMethodFields();
       saveState();
       renderOutputs();
     }
 
     function validateBasicConditions(conditions) {
+      if (conditions.calc_method === "上下幅平均") {
+        return "";
+      }
+
       if (
-        conditions.top_width_m === null ||
-        conditions.top_width_m <= 0
+        conditions.slope_top_width_m === null ||
+        conditions.slope_top_width_m <= 0
       ) {
         return "上幅を入力してください";
       }
 
-      if (conditions.calc_method === "上下幅平均") {
-        if (
-          conditions.bottom_width_m === null ||
-          conditions.bottom_width_m <= 0
-        ) {
-          return "上幅と下幅を入力してください";
-        }
-      } else {
-        if (
-          conditions.front_slope_n === null ||
-          conditions.rear_slope_n === null
-        ) {
-          return "上幅と前後勾配を入力してください";
-        }
+      if (
+        conditions.front_slope_n === null ||
+        conditions.rear_slope_n === null
+      ) {
+        return "上幅と前後勾配を入力してください";
+      }
 
-        if (
-          conditions.front_slope_n < 0 ||
-          conditions.rear_slope_n < 0
-        ) {
-          return "勾配は0以上で入力してください";
-        }
+      if (
+        conditions.front_slope_n < 0 ||
+        conditions.rear_slope_n < 0
+      ) {
+        return "勾配は0以上で入力してください";
       }
 
       return "";
     }
 
-    function validatePoints(points) {
+    function validatePoints(
+      points,
+      calculationMethod =
+        state.conditions.calc_method
+    ) {
       if (points.length < 2) {
         return "2測点以上入力してください";
       }
 
-      for (let index = 0; index < points.length; index += 1) {
+      for (
+        let index = 0;
+        index < points.length;
+        index += 1
+      ) {
         const point = points[index];
 
         if (
@@ -801,12 +986,34 @@
           return "高さは0以上で入力してください";
         }
 
-        if (index === 0 && point.section_length_m !== 0) {
+        if (
+          index === 0 &&
+          point.section_length_m !== 0
+        ) {
           return "1測点目の区間長は0にしてください";
         }
 
-        if (index > 0 && point.section_length_m <= 0) {
+        if (
+          index > 0 &&
+          point.section_length_m <= 0
+        ) {
           return "2測点目以降の区間長は0より大きくしてください";
+        }
+
+        if (calculationMethod === "上下幅平均") {
+          if (
+            point.point_top_width_m === null ||
+            point.point_bottom_width_m === null
+          ) {
+            return "各測点の上幅と下幅を入力してください";
+          }
+
+          if (
+            point.point_top_width_m <= 0 ||
+            point.point_bottom_width_m <= 0
+          ) {
+            return "各測点の上幅と下幅は0より大きくしてください";
+          }
         }
       }
 
@@ -815,8 +1022,15 @@
 
     function calculate() {
       const conditions = state.conditions;
-      const basicError = validateBasicConditions(conditions);
-      const pointError = validatePoints(state.points);
+
+      const basicError =
+        validateBasicConditions(conditions);
+
+      const pointError =
+        validatePoints(
+          state.points,
+          conditions.calc_method
+        );
 
       const rows = [];
       let previousArea = null;
@@ -824,26 +1038,52 @@
 
       state.points.forEach((point, index) => {
         const heightM =
-          point.height_mm === null ? null : point.height_mm / 1000;
+          point.height_mm === null
+            ? null
+            : point.height_mm / 1000;
 
         let calculationWidth = null;
         let area = null;
         let section = index === 0 ? 0 : null;
 
-        if (!basicError && heightM !== null && heightM >= 0) {
-          if (conditions.calc_method === "上下幅平均") {
-            calculationWidth =
-              (conditions.top_width_m + conditions.bottom_width_m) / 2;
+        if (
+          !basicError &&
+          heightM !== null &&
+          heightM >= 0
+        ) {
+          if (
+            conditions.calc_method === "上下幅平均"
+          ) {
+            if (
+              point.point_top_width_m !== null &&
+              point.point_bottom_width_m !== null &&
+              point.point_top_width_m > 0 &&
+              point.point_bottom_width_m > 0
+            ) {
+              calculationWidth =
+                (
+                  point.point_top_width_m +
+                  point.point_bottom_width_m
+                ) / 2;
 
-            area = calculationWidth * heightM;
+              area = calculationWidth * heightM;
+            }
           } else {
             calculationWidth =
-              conditions.top_width_m +
-              (conditions.front_slope_n + conditions.rear_slope_n) *
-                heightM;
+              conditions.slope_top_width_m +
+              (
+                conditions.front_slope_n +
+                conditions.rear_slope_n
+              ) *
+              heightM;
 
             area =
-              ((conditions.top_width_m + calculationWidth) / 2) *
+              (
+                (
+                  conditions.slope_top_width_m +
+                  calculationWidth
+                ) / 2
+              ) *
               heightM;
           }
         }
@@ -856,7 +1096,9 @@
           point.section_length_m > 0
         ) {
           section =
-            ((previousArea + area) / 2) *
+            (
+              (previousArea + area) / 2
+            ) *
             point.section_length_m;
 
           total += section;
@@ -864,11 +1106,20 @@
 
         rows.push({
           point_no: index + 1,
-          section_length_m: point.section_length_m,
-          height_mm: point.height_mm,
-          calc_width_m: calculationWidth,
-          area_m2: area,
-          section_m3: section
+          section_length_m:
+            point.section_length_m,
+          height_mm:
+            point.height_mm,
+          point_top_width_m:
+            point.point_top_width_m,
+          point_bottom_width_m:
+            point.point_bottom_width_m,
+          calc_width_m:
+            calculationWidth,
+          area_m2:
+            area,
+          section_m3:
+            section
         });
 
         previousArea = area;
@@ -882,22 +1133,32 @@
     }
 
     function renderResult(calculation) {
-      const basicError = validateBasicConditions(state.conditions);
+      const basicError =
+        validateBasicConditions(state.conditions);
 
       elements.totalValue.textContent =
-        basicError ? "－" : fixed(calculation.total, 3);
+        basicError
+          ? "－"
+          : fixed(calculation.total, 3);
 
       if (calculation.error) {
-        elements.resultStatus.textContent = calculation.error;
+        elements.resultStatus.textContent =
+          calculation.error;
+
         elements.resultStatus.className =
           "result-status warning";
       } else {
-        elements.resultStatus.textContent = "計算完了";
-        elements.resultStatus.className = "result-status ok";
+        elements.resultStatus.textContent =
+          "計算完了";
+
+        elements.resultStatus.className =
+          "result-status ok";
       }
     }
 
     function renderPoints(calculation) {
+      const averageMode = isAverageMethod();
+
       elements.pointCount.textContent =
         `${state.points.length}測点`;
 
@@ -908,90 +1169,160 @@
             1測点目は区間長「0」で追加してください。
           </div>
         `;
+
         return;
       }
 
-      elements.pointList.innerHTML = calculation.rows
-        .map(row => `
-          <article class="point-card">
-            <div class="point-head">
-              <div class="point-number">測点 No.${row.point_no}</div>
-              <div>
-                区間 ${row.point_no === 1
-                  ? "－"
-                  : fixed(row.section_m3, 3) + " m³"}
-              </div>
-            </div>
+      elements.pointList.innerHTML =
+        calculation.rows
+          .map(row => {
+            const widthDetails = averageMode
+              ? `
+                <div class="point-value">
+                  <small>上幅</small>
+                  <strong>
+                    ${fixed(row.point_top_width_m, 3)} m
+                  </strong>
+                </div>
 
-            <div class="point-data">
-              <div class="point-value">
-                <small>区間長</small>
-                <strong>${fixed(row.section_length_m, 3)} m</strong>
-              </div>
+                <div class="point-value">
+                  <small>下幅</small>
+                  <strong>
+                    ${fixed(row.point_bottom_width_m, 3)} m
+                  </strong>
+                </div>
+              `
+              : "";
 
-              <div class="point-value">
-                <small>高さ</small>
-                <strong>${fixed(row.height_mm, 0)} mm</strong>
-              </div>
+            return `
+              <article class="point-card">
+                <div class="point-head">
+                  <div class="point-number">
+                    測点 No.${row.point_no}
+                  </div>
 
-              <div class="point-value">
-                <small>計算幅</small>
-                <strong>${fixed(row.calc_width_m, 3)} m</strong>
-              </div>
+                  <div>
+                    区間 ${
+                      row.point_no === 1
+                        ? "－"
+                        : fixed(row.section_m3, 3) +
+                          " m³"
+                    }
+                  </div>
+                </div>
 
-              <div class="point-value">
-                <small>断面積</small>
-                <strong>${fixed(row.area_m2, 3)} m²</strong>
-              </div>
-            </div>
+                <div class="point-data">
+                  <div class="point-value">
+                    <small>区間長</small>
+                    <strong>
+                      ${fixed(row.section_length_m, 3)} m
+                    </strong>
+                  </div>
 
-            <div class="point-actions">
-              <button
-                class="small-button edit-button"
-                type="button"
-                data-action="edit"
-                data-index="${row.point_no - 1}"
-              >
-                修正
-              </button>
+                  <div class="point-value">
+                    <small>高さ</small>
+                    <strong>
+                      ${fixed(row.height_mm, 0)} mm
+                    </strong>
+                  </div>
 
-              <button
-                class="small-button delete-button"
-                type="button"
-                data-action="delete"
-                data-index="${row.point_no - 1}"
-              >
-                削除
-              </button>
-            </div>
-          </article>
-        `)
-        .join("");
+                  ${widthDetails}
+
+                  <div class="point-value">
+                    <small>計算幅</small>
+                    <strong>
+                      ${fixed(row.calc_width_m, 3)} m
+                    </strong>
+                  </div>
+
+                  <div class="point-value">
+                    <small>断面積</small>
+                    <strong>
+                      ${fixed(row.area_m2, 3)} m²
+                    </strong>
+                  </div>
+                </div>
+
+                <div class="point-actions">
+                  <button
+                    class="small-button edit-button"
+                    type="button"
+                    data-action="edit"
+                    data-index="${row.point_no - 1}"
+                  >
+                    修正
+                  </button>
+
+                  <button
+                    class="small-button delete-button"
+                    type="button"
+                    data-action="delete"
+                    data-index="${row.point_no - 1}"
+                  >
+                    削除
+                  </button>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
     }
 
     function renderOutputs() {
       const calculation = calculate();
+
       renderResult(calculation);
       renderPoints(calculation);
     }
 
     function resetPointForm() {
       editingIndex = null;
+
       elements.sectionLength.value =
         state.points.length === 0 ? "0" : "";
+
       elements.heightMm.value = "";
+
+      const lastPoint = getLastPoint();
+
+      if (lastPoint) {
+        elements.pointTopWidth.value =
+          lastPoint.point_top_width_m ?? "";
+
+        elements.pointBottomWidth.value =
+          lastPoint.point_bottom_width_m ?? "";
+      } else {
+        elements.pointTopWidth.value = "";
+        elements.pointBottomWidth.value = "";
+      }
+
       elements.pointError.textContent = "";
-      elements.pointSubmitButton.textContent = "測点を追加";
-      elements.cancelEditButton.classList.add("hidden");
+
+      elements.pointSubmitButton.textContent =
+        "測点を追加";
+
+      elements.cancelEditButton.classList.add(
+        "hidden"
+      );
+
+      updateMethodFields();
     }
 
-    function validatePointInput(sectionLength, heightMm) {
+    function validatePointInput(
+      sectionLength,
+      heightMm,
+      pointTopWidth,
+      pointBottomWidth
+    ) {
       const pointIndex =
         editingIndex === null
           ? state.points.length
           : editingIndex;
 
-      if (sectionLength === null || heightMm === null) {
+      if (
+        sectionLength === null ||
+        heightMm === null
+      ) {
         return "区間長と高さを入力してください";
       }
 
@@ -999,12 +1330,34 @@
         return "高さは0以上で入力してください";
       }
 
-      if (pointIndex === 0 && sectionLength !== 0) {
+      if (
+        pointIndex === 0 &&
+        sectionLength !== 0
+      ) {
         return "1測点目の区間長は0にしてください";
       }
 
-      if (pointIndex > 0 && sectionLength <= 0) {
+      if (
+        pointIndex > 0 &&
+        sectionLength <= 0
+      ) {
         return "2測点目以降の区間長は0より大きくしてください";
+      }
+
+      if (isAverageMethod()) {
+        if (
+          pointTopWidth === null ||
+          pointBottomWidth === null
+        ) {
+          return "上幅と下幅を入力してください";
+        }
+
+        if (
+          pointTopWidth <= 0 ||
+          pointBottomWidth <= 0
+        ) {
+          return "上幅と下幅は0より大きくしてください";
+        }
       }
 
       return "";
@@ -1018,18 +1371,35 @@
       }
 
       editingIndex = index;
+
       elements.sectionLength.value =
         point.section_length_m ?? "";
-      elements.heightMm.value = point.height_mm ?? "";
-      elements.pointSubmitButton.textContent = "測点を更新";
-      elements.cancelEditButton.classList.remove("hidden");
+
+      elements.heightMm.value =
+        point.height_mm ?? "";
+
+      elements.pointTopWidth.value =
+        point.point_top_width_m ?? "";
+
+      elements.pointBottomWidth.value =
+        point.point_bottom_width_m ?? "";
+
+      elements.pointSubmitButton.textContent =
+        "測点を更新";
+
+      elements.cancelEditButton.classList.remove(
+        "hidden"
+      );
+
       elements.pointError.textContent = "";
 
       elements.sectionLength.focus();
 
       window.scrollTo({
         top:
-          elements.pointForm.getBoundingClientRect().top +
+          elements.pointForm
+            .getBoundingClientRect()
+            .top +
           window.scrollY -
           100,
         behavior: "smooth"
@@ -1041,7 +1411,11 @@
         return;
       }
 
-      if (!confirm(`測点 No.${index + 1}を削除しますか？`)) {
+      if (
+        !confirm(
+          `測点 No.${index + 1}を削除しますか？`
+        )
+      ) {
         return;
       }
 
@@ -1057,70 +1431,124 @@
       showToast("測点を削除しました");
     }
 
-    elements.pointForm.addEventListener("submit", event => {
-      event.preventDefault();
+    elements.pointForm.addEventListener(
+      "submit",
+      event => {
+        event.preventDefault();
 
-      const sectionLength =
-        numberOrNull(elements.sectionLength.value);
+        const sectionLength =
+          numberOrNull(
+            elements.sectionLength.value
+          );
 
-      const heightMm =
-        numberOrNull(elements.heightMm.value);
+        const heightMm =
+          numberOrNull(
+            elements.heightMm.value
+          );
 
-      const error =
-        validatePointInput(sectionLength, heightMm);
+        const pointTopWidth =
+          numberOrNull(
+            elements.pointTopWidth.value
+          );
 
-      if (error) {
-        elements.pointError.textContent = error;
-        return;
+        const pointBottomWidth =
+          numberOrNull(
+            elements.pointBottomWidth.value
+          );
+
+        const error = validatePointInput(
+          sectionLength,
+          heightMm,
+          pointTopWidth,
+          pointBottomWidth
+        );
+
+        if (error) {
+          elements.pointError.textContent = error;
+          return;
+        }
+
+        const existingPoint =
+          editingIndex === null
+            ? null
+            : state.points[editingIndex];
+
+        const point = {
+          section_length_m: sectionLength,
+          height_mm: heightMm,
+
+          point_top_width_m:
+            isAverageMethod()
+              ? pointTopWidth
+              : (
+                  pointTopWidth ??
+                  existingPoint?.point_top_width_m ??
+                  null
+                ),
+
+          point_bottom_width_m:
+            isAverageMethod()
+              ? pointBottomWidth
+              : (
+                  pointBottomWidth ??
+                  existingPoint?.point_bottom_width_m ??
+                  null
+                )
+        };
+
+        if (editingIndex === null) {
+          state.points.push(point);
+          showToast("測点を追加しました");
+        } else {
+          state.points[editingIndex] = point;
+          showToast("測点を更新しました");
+        }
+
+        saveState();
+        resetPointForm();
+        renderOutputs();
       }
+    );
 
-      const point = {
-        section_length_m: sectionLength,
-        height_mm: heightMm
-      };
-
-      if (editingIndex === null) {
-        state.points.push(point);
-        showToast("測点を追加しました");
-      } else {
-        state.points[editingIndex] = point;
-        showToast("測点を更新しました");
+    elements.cancelEditButton.addEventListener(
+      "click",
+      () => {
+        resetPointForm();
       }
+    );
 
-      saveState();
-      resetPointForm();
-      renderOutputs();
-    });
+    elements.pointList.addEventListener(
+      "click",
+      event => {
+        const button =
+          event.target.closest("[data-action]");
 
-    elements.cancelEditButton.addEventListener("click", () => {
-      resetPointForm();
-    });
+        if (!button) {
+          return;
+        }
 
-    elements.pointList.addEventListener("click", event => {
-      const button = event.target.closest("[data-action]");
+        const index =
+          Number(button.dataset.index);
 
-      if (!button) {
-        return;
+        if (button.dataset.action === "edit") {
+          editPoint(index);
+        }
+
+        if (button.dataset.action === "delete") {
+          deletePoint(index);
+        }
       }
-
-      const index = Number(button.dataset.index);
-
-      if (button.dataset.action === "edit") {
-        editPoint(index);
-      }
-
-      if (button.dataset.action === "delete") {
-        deletePoint(index);
-      }
-    });
+    );
 
     [
-      elements.topWidth,
-      elements.bottomWidth,
+      elements.slopeTopWidth,
       elements.frontSlope,
       elements.rearSlope
     ].forEach(input => {
-      input.addEventListener("input", syncConditions);
+      input.addEventListener(
+        "input",
+        syncConditions
+      );
     });
 
     elements.calculationMethod.addEventListener(
@@ -1130,7 +1558,10 @@
 
     function csvEscape(value) {
       const text =
-        value === null || value === undefined ? "" : String(value);
+        value === null ||
+        value === undefined
+          ? ""
+          : String(value);
 
       return `"${text.replace(/"/g, '""')}"`;
     }
@@ -1145,13 +1576,14 @@
       const headers = [
         "app_version",
         "calc_method",
-        "top_width_m",
-        "bottom_width_m",
+        "slope_top_width_m",
         "front_slope_n",
         "rear_slope_n",
         "point_no",
         "section_length_m",
         "height_mm",
+        "point_top_width_m",
+        "point_bottom_width_m",
         "calc_width_m",
         "area_m2",
         "section_m3",
@@ -1162,13 +1594,14 @@
       const rows = calculation.rows.map(row => [
         APP_VERSION,
         state.conditions.calc_method,
-        state.conditions.top_width_m,
-        state.conditions.bottom_width_m,
+        state.conditions.slope_top_width_m,
         state.conditions.front_slope_n,
         state.conditions.rear_slope_n,
         row.point_no,
         row.section_length_m,
         row.height_mm,
+        row.point_top_width_m,
+        row.point_bottom_width_m,
         row.calc_width_m,
         row.area_m2,
         row.section_m3,
@@ -1178,7 +1611,9 @@
 
       return [
         headers.map(csvEscape).join(","),
-        ...rows.map(row => row.map(csvEscape).join(","))
+        ...rows.map(row =>
+          row.map(csvEscape).join(",")
+        )
       ].join("\r\n");
     }
 
@@ -1186,27 +1621,40 @@
       try {
         const csv = createCsv();
         const date = new Date();
+
         const dateText =
           `${date.getFullYear()}` +
-          `${String(date.getMonth() + 1).padStart(2, "0")}` +
-          `${String(date.getDate()).padStart(2, "0")}`;
+          `${String(
+            date.getMonth() + 1
+          ).padStart(2, "0")}` +
+          `${String(
+            date.getDate()
+          ).padStart(2, "0")}`;
 
-        const fileName = `VolumeCo_${dateText}.csv`;
+        const fileName =
+          `VolumeCo_${dateText}.csv`;
+
         const blob = new Blob(
           ["\uFEFF" + csv],
-          { type: "text/csv;charset=utf-8" }
+          {
+            type: "text/csv;charset=utf-8"
+          }
         );
 
         const file = new File(
           [blob],
           fileName,
-          { type: "text/csv;charset=utf-8" }
+          {
+            type: "text/csv;charset=utf-8"
+          }
         );
 
         if (
           navigator.share &&
           navigator.canShare &&
-          navigator.canShare({ files: [file] })
+          navigator.canShare({
+            files: [file]
+          })
         ) {
           await navigator.share({
             files: [file],
@@ -1217,20 +1665,31 @@
           return;
         }
 
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
+        const url =
+          URL.createObjectURL(blob);
+
+        const link =
+          document.createElement("a");
 
         link.href = url;
         link.download = fileName;
+
         document.body.appendChild(link);
         link.click();
         link.remove();
 
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        setTimeout(
+          () => URL.revokeObjectURL(url),
+          1000
+        );
+
         showToast("CSVを出力しました");
       } catch (error) {
         if (error.name !== "AbortError") {
-          alert(error.message || "CSVを出力できませんでした");
+          alert(
+            error.message ||
+            "CSVを出力できませんでした"
+          );
         }
       }
     }
@@ -1241,9 +1700,14 @@
       let field = "";
       let inQuotes = false;
 
-      const source = text.replace(/^\uFEFF/, "");
+      const source =
+        text.replace(/^\uFEFF/, "");
 
-      for (let index = 0; index < source.length; index += 1) {
+      for (
+        let index = 0;
+        index < source.length;
+        index += 1
+      ) {
         const character = source[index];
 
         if (inQuotes) {
@@ -1274,12 +1738,16 @@
 
       row.push(field);
 
-      if (row.some(value => value !== "")) {
+      if (
+        row.some(value => value !== "")
+      ) {
         rows.push(row);
       }
 
       return rows.filter(csvRow =>
-        csvRow.some(value => value.trim() !== "")
+        csvRow.some(
+          value => value.trim() !== ""
+        )
       );
     }
 
@@ -1288,80 +1756,148 @@
       const csvRows = parseCsv(text);
 
       if (csvRows.length < 2) {
-        throw new Error("CSVにデータがありません");
+        throw new Error(
+          "CSVにデータがありません"
+        );
       }
 
-      const headers = csvRows[0].map(header => header.trim());
+      const headers =
+        csvRows[0].map(
+          header => header.trim()
+        );
+
       const requiredHeaders = [
         "calc_method",
-        "top_width_m",
-        "bottom_width_m",
+        "slope_top_width_m",
         "front_slope_n",
         "rear_slope_n",
         "point_no",
         "section_length_m",
-        "height_mm"
+        "height_mm",
+        "point_top_width_m",
+        "point_bottom_width_m"
       ];
 
-      for (const header of requiredHeaders) {
+      for (
+        const header of requiredHeaders
+      ) {
         if (!headers.includes(header)) {
-          throw new Error(`CSV項目「${header}」がありません`);
+          throw new Error(
+            `CSV項目「${header}」がありません`
+          );
         }
       }
 
-      const records = csvRows.slice(1).map(csvRow => {
-        const record = {};
+      const records =
+        csvRows.slice(1).map(csvRow => {
+          const record = {};
 
-        headers.forEach((header, index) => {
-          record[header] = csvRow[index] ?? "";
+          headers.forEach(
+            (header, index) => {
+              record[header] =
+                csvRow[index] ?? "";
+            }
+          );
+
+          return record;
         });
-
-        return record;
-      });
 
       const first = records[0];
 
       const importedState = {
         version: APP_VERSION,
+
         conditions: {
           calc_method:
             first.calc_method === "上下幅平均"
               ? "上下幅平均"
               : "勾配で計算",
-          top_width_m: numberOrNull(first.top_width_m),
-          bottom_width_m: numberOrNull(first.bottom_width_m),
-          front_slope_n: numberOrNull(first.front_slope_n),
-          rear_slope_n: numberOrNull(first.rear_slope_n)
+
+          slope_top_width_m:
+            numberOrNull(
+              first.slope_top_width_m
+            ),
+
+          front_slope_n:
+            numberOrNull(
+              first.front_slope_n
+            ),
+
+          rear_slope_n:
+            numberOrNull(
+              first.rear_slope_n
+            )
         },
+
         points: records
           .map(record => ({
-            point_no: Number(record.point_no),
+            point_no:
+              Number(record.point_no),
+
             section_length_m:
-              numberOrNull(record.section_length_m),
-            height_mm: numberOrNull(record.height_mm)
+              numberOrNull(
+                record.section_length_m
+              ),
+
+            height_mm:
+              numberOrNull(
+                record.height_mm
+              ),
+
+            point_top_width_m:
+              numberOrNull(
+                record.point_top_width_m
+              ),
+
+            point_bottom_width_m:
+              numberOrNull(
+                record.point_bottom_width_m
+              )
           }))
-          .sort((a, b) => a.point_no - b.point_no)
+          .sort(
+            (firstPoint, secondPoint) =>
+              firstPoint.point_no -
+              secondPoint.point_no
+          )
           .map(record => ({
-            section_length_m: record.section_length_m,
-            height_mm: record.height_mm
+            section_length_m:
+              record.section_length_m,
+
+            height_mm:
+              record.height_mm,
+
+            point_top_width_m:
+              record.point_top_width_m,
+
+            point_bottom_width_m:
+              record.point_bottom_width_m
           })),
-        updated_at: new Date().toISOString()
+
+        updated_at:
+          new Date().toISOString()
       };
 
       const basicError =
-        validateBasicConditions(importedState.conditions);
+        validateBasicConditions(
+          importedState.conditions
+        );
 
       if (basicError) {
         throw new Error(basicError);
       }
 
-      const pointError = validatePoints(importedState.points);
+      const pointError =
+        validatePoints(
+          importedState.points,
+          importedState.conditions.calc_method
+        );
 
       if (pointError) {
         throw new Error(pointError);
       }
 
       state = importedState;
+
       saveState();
       setBasicInputs();
       resetPointForm();
@@ -1374,14 +1910,18 @@
       exportCsv
     );
 
-    elements.csvImportButton.addEventListener("click", () => {
-      elements.csvFileInput.click();
-    });
+    elements.csvImportButton.addEventListener(
+      "click",
+      () => {
+        elements.csvFileInput.click();
+      }
+    );
 
     elements.csvFileInput.addEventListener(
       "change",
       async event => {
-        const file = event.target.files[0];
+        const file =
+          event.target.files[0];
 
         if (!file) {
           return;
@@ -1390,7 +1930,10 @@
         try {
           await importCsv(file);
         } catch (error) {
-          alert(error.message || "CSVを読み込めませんでした");
+          alert(
+            error.message ||
+            "CSVを読み込めませんでした"
+          );
         } finally {
           elements.csvFileInput.value = "";
         }
@@ -1409,11 +1952,14 @@
         }
 
         state = createInitialState(false);
+
         saveState();
         setBasicInputs();
         resetPointForm();
         renderOutputs();
-        showToast("新しい計算を開始しました");
+        showToast(
+          "新しい計算を開始しました"
+        );
       }
     );
 
@@ -1423,12 +1969,24 @@
     saveState();
 
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("./sw.js", { scope: "./" })
-          .then(registration => registration.update())
-          .catch(error => console.error(error));
-      });
+      window.addEventListener(
+        "load",
+        () => {
+          navigator.serviceWorker
+            .register(
+              "./sw.js",
+              { scope: "./" }
+            )
+            .then(
+              registration =>
+                registration.update()
+            )
+            .catch(
+              error =>
+                console.error(error)
+            );
+        }
+      );
     }
   </script>
 </body>
