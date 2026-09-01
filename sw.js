@@ -1,4 +1,4 @@
-const CACHE_NAME = "volumeco-v0.3.0";
+const CACHE_NAME = "volumeco-v0.4.0";
 
 const APP_FILES = [
   "./",
