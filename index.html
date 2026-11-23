@@ -427,7 +427,7 @@
         <h1>VolumeCo</h1>
         <p class="subtitle">コンクリート残量計算</p>
       </div>
-      <div class="version">Version 0.4</div>
+      <div class="version">Version 0.4.1</div>
     </div>
   </header>
 
@@ -628,7 +628,7 @@
   <script>
     "use strict";
 
-    const APP_VERSION = "0.4";
+    const APP_VERSION = "0.4.1";
     const STORAGE_KEY = "volumeco_current_v04";
 
     const elements = {
@@ -1967,6 +1967,11 @@
     resetPointForm();
     renderOutputs();
     saveState();
+
+    // 保存データ（オフライン用の画面・入力内容）を iPhone が自動で消さないよう依頼する
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().catch(() => {});
+    }
 
     if ("serviceWorker" in navigator) {
       window.addEventListener(
