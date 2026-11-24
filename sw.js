@@ -1,4 +1,4 @@
-const CACHE_NAME = "volumeco-v0.4.1";
+const CACHE_NAME = "volumeco-v0.4.2";
 
 const APP_FILES = [
   "./",
@@ -31,7 +31,8 @@ self.addEventListener("activate", event => {
       .then(cacheNames =>
         Promise.all(
           cacheNames
-            .filter(cacheName => cacheName !== CACHE_NAME)
+            // 同じ github.io の他のアプリ（Heron・Traverse）のキャッシュは消さない
+            .filter(cacheName => cacheName.startsWith("volumeco-") && cacheName !== CACHE_NAME)
             .map(cacheName => caches.delete(cacheName))
         )
       )
